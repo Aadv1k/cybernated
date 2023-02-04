@@ -33,6 +33,17 @@ function handle404(res) {
   })
 }
 
+function handleJS(url, res) {
+  const filename = url.split('/').pop();
+  if (existsSync(`./public/${filename}`)) {
+    let file = readFileSync(`./public/${filename}`)
+    res.writeHead(200, {"Content-type" : MIME.css})
+    res.write(file);
+  } else {
+    handle404(res);
+  }
+}
+
 function handleCSS(url, res) {
   const filename = url.split('/').pop();
   if (existsSync(`./public/${filename}`)) {
@@ -101,6 +112,8 @@ const server = http.createServer(async (req, res) => {
     await handleRegister(url, res);
   } else if (ext === "css") {
     handleCSS(url, res);
+  } else if (ext === "js") {
+    handleJS(url, res);
   } else {
     handle404(res);
   }
