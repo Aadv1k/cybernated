@@ -10,13 +10,26 @@ const MODE = consts.ABSTRACT_API_KEY ? consts.MODE : "development";
 
 function sendJsonErr(res, msg, code) {
   res.writeHead(code, { "Content-type": consts.MIME.json });
-  res.write(JSON.stringify({ error: msg }));
+  res.write(JSON.stringify({ error: msg, status: code }));
 }
 
 function handleIndex(res) {
+  let html = "";
+  const db = new UserModel();
+  const users = db.getUsers();
+  users.forEach(e => {
+    html += `<li>${e.email}</li>`
+  })
+
   res.writeHead(consts.STATUS.ok, { "Content-type": consts.MIME.html });
-  const html = fs.readFileSync("./views/index.html");
-  res.write(html);
+  let form = `
+  <form action="/register">
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email">
+    <button type="submit">Submit</button>
+  </form>
+  `
+  res.write(`${form} <ul>${html}</ul>`);
 }
 
 async function handleRegister(req, res) {
@@ -33,13 +46,13 @@ async function handleRegister(req, res) {
 
   if (db.userExists(regEmail)) {
     res.writeHead(consts.STATUS.ok, { "Content-type": consts.MIME.html });
-    res.write(`<h1>${regEmail} </h1>`);
+    res.write(`<h1>${regEmail}</h1>`);
     return;
   }
 
   const emailValid = isEmailValid(regEmail);
   if (!emailValid) {
-    sendJsonErr(res, "the email is not valid", consts.STATUS.internalErr);
+    sendJsonErr(res, "The email is invalid", consts.STATUS.badReq);
     return;
   }
 
@@ -50,7 +63,7 @@ async function handleRegister(req, res) {
       if (!emailReal) {
         sendJsonErr(
           res,
-          "the email is not a real address",
+          "The email is not a real address",
           consts.STATUS.badReq
         );
         return;
@@ -66,6 +79,7 @@ async function handleRegister(req, res) {
   }
 
   db.pushUser(regEmail, []);
+
   res.writeHead(consts.STATUS.ok, { "Content-type": consts.MIME.html });
   res.write(`<h1> ADDED TO DB: ${regEmail} </h1>`);
   db.close();
