@@ -27,6 +27,13 @@ class UserModel {
     return this.db;
   }
 
+  updateUser(oldEmail, newData) {
+    let idx = this.db.findIndex(e => e.email == oldEmail)
+    if (!idx) return undefined;
+    this.db[idx] = newData;
+    return this.db;
+  }
+
   getUsers() {
     return this.db;
   }
