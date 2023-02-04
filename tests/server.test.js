@@ -21,6 +21,12 @@ describe("Test to check the API", () => {
     })
   })
 
+  test("resource not found", () => {
+    http.get(baseURL + "/wedowiheoiqwhfeo", (res) => {
+      res.on("end", () => expect(res.status).toBe(404));
+    })
+  })
+
   test("Bad email", () => {
     http.get(baseURL + "?email=incorrect", (res) => {
       res.on("end", () => expect(res.status).toBe(400));

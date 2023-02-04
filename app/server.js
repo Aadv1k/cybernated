@@ -1,58 +1,69 @@
 const http = require("http");
 const https = require("https");
-const fs = require("fs");
+const {existsSync, readFileSync} = require("fs");
 const url = require("url");
+const ejs = require("ejs")
 
 const UserModel = require("../models/UserModel");
 const { isEmailValid, isEmailReal } = require("./validation");
-const consts = require("./constants");
-const MODE = consts.ABSTRACT_API_KEY ? consts.MODE : "development";
+const {STATUS, MIME, MODE: constMode, ABSTRACT_API_KEY} = require("./constants");
+const MODE = ABSTRACT_API_KEY ? constMode : "development";
 
-function sendJsonErr(res, msg, code) {
-  res.writeHead(code, { "Content-type": consts.MIME.json });
-  res.write(JSON.stringify({ error: msg, status: code }));
+function sendJsonErr(res, errObj) {
+  res.writeHead(errObj.status, { "Content-type": MIME.json });
+  res.write(JSON.stringify({ error: errObj.code, message: errObj.msg }));
 }
 
 function handleIndex(res) {
-  let html = "";
   const db = new UserModel();
   const users = db.getUsers();
-  users.forEach(e => {
-    html += `<li>${e.email}</li>`
-  })
 
-  res.writeHead(consts.STATUS.ok, { "Content-type": consts.MIME.html });
-  let form = `
-  <form action="/register">
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email">
-    <button type="submit">Submit</button>
-  </form>
-  `
-  res.write(`${form} <ul>${html}</ul>`);
+  res.writeHead(200, { "Content-type": MIME.html });
+
+  ejs.renderFile("./views/index.ejs", {users: users}, (err, htmlStr) => {
+    if (err) console.error(err);
+    res.write(htmlStr);
+  })
 }
 
-async function handleRegister(req, res) {
-  let registerURL = new URL("https://example.com/" + req.url);
+function handle404(res) {
+  res.writeHead(404, {"Content-type" : MIME.html})
+  ejs.renderFile("./views/404.ejs", {}, (_, htmlStr) => {
+    res.write(htmlStr);
+  })
+}
+
+function handleCSS(url, res) {
+  const filename = url.split('/').pop();
+  if (existsSync(`./public/${filename}`)) {
+    let file = readFileSync(`./public/${filename}`)
+    res.writeHead(200, {"Content-type" : MIME.css})
+    res.write(file);
+  } else {
+    handle404(res);
+  }
+}
+
+async function handleRegister(reqURL, res) {
+  let registerURL = new URL("https://example.com/" + reqURL);
   let registerParams = registerURL.searchParams;
   let regEmail = registerParams.get("email");
 
   const db = new UserModel();
 
   if (!regEmail) {
-    sendJsonErr(res, "email is required", consts.STATUS.badReq);
+    sendJsonErr(res, STATUS.emailInvalid);
     return;
   }
 
   if (db.userExists(regEmail)) {
-    res.writeHead(consts.STATUS.ok, { "Content-type": consts.MIME.html });
-    res.write(`<h1>${regEmail}</h1>`);
+    sendJsonErr(res, STATUS.emailRegistered)
     return;
   }
 
   const emailValid = isEmailValid(regEmail);
   if (!emailValid) {
-    sendJsonErr(res, "The email is invalid", consts.STATUS.badReq);
+    sendJsonErr(res, STATUS.emailInvalid)
     return;
   }
 
@@ -61,18 +72,13 @@ async function handleRegister(req, res) {
     try {
       const emailReal = await isEmailReal(regEmail);
       if (!emailReal) {
-        sendJsonErr(
-          res,
-          "The email is not a real address",
-          consts.STATUS.badReq
-        );
+        sendJsonErr(res, STATUS.emailInvalid)
         return;
       }
     } catch (err) {
       sendJsonErr(
         res,
-        "unable to verify the email, this might be a issue on our end",
-        consts.STATUS.internalErr
+        STATUS.internalError
       );
       return;
     }
@@ -80,17 +86,23 @@ async function handleRegister(req, res) {
 
   db.pushUser(regEmail, []);
 
-  res.writeHead(consts.STATUS.ok, { "Content-type": consts.MIME.html });
+  res.writeHead(200, { "Content-type": MIME.html });
   res.write(`<h1> ADDED TO DB: ${regEmail} </h1>`);
   db.close();
 }
 
 const server = http.createServer(async (req, res) => {
   const url = req.url;
-  if (url == "/") {
+  const ext = req.url.split('.').pop();
+
+  if (url === "/") {
     handleIndex(res);
   } else if (url.startsWith("/register")) {
-    await handleRegister(req, res);
+    await handleRegister(url, res);
+  } else if (ext === "css") {
+    handleCSS(url, res);
+  } else {
+    handle404(res);
   }
   res.end();
 });
