@@ -3,13 +3,13 @@ const {readFileSync, writeFileSync, existsSync} = require("fs");
 class UserModel {
   constructor() {
     let exists = existsSync("data.json")
-    if (!exists) writeFileSync("data.json");
+    if (!exists) writeFileSync("data.json", "[]");
     let file = readFileSync("data.json");
 
     try {
       this.db = JSON.parse(file);
     } catch (err) {
-      this.db = JSON.parse("[]");
+      this.db = [];
     }
   }
 
