@@ -6,12 +6,11 @@ const ejs = require("ejs")
 
 const UserModel = require("../models/UserModel");
 const { isEmailValid, isEmailReal } = require("./validation");
-const {STATUS, MIME, MODE: constMode, ABSTRACT_API_KEY} = require("./constants");
-const MODE = ABSTRACT_API_KEY ? constMode : "development";
+const {STATUS, MIME, MODE} = require("./constants");
 
 function sendJsonErr(res, errObj) {
   res.writeHead(errObj.status, { "Content-type": MIME.json });
-  res.write(JSON.stringify({ error: errObj.code, message: errObj.msg }));
+  res.write(JSON.stringify({ code: errObj.code, message: errObj.msg }));
 }
 
 function handleIndex(res) {
@@ -97,8 +96,8 @@ async function handleRegister(reqURL, res) {
 
   db.pushUser(regEmail, []);
 
-  res.writeHead(200, { "Content-type": MIME.html });
-  res.write(`<h1> ADDED TO DB: ${regEmail} </h1>`);
+  res.writeHead(200, { "Content-type": MIME.json });
+  res.write(JSON.stringify({code: "email-registered", message: "the email was registered successfully"}));
   db.close();
 }
 

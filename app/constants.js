@@ -3,7 +3,7 @@ require("dotenv").config();
 module.exports = {
   PORT: process.env.PORT || 4000,
   MODE: process.env.NODE_ENV || "development",
-  ABSTRACT_API_KEY: process.env.ABSTRACT_API_KEY || undefined,
+  ABSTRACT_API_KEY: process.env.ABSTRACT_API_KEY,
   ABSTRACT_API_URL: "https://emailvalidation.abstractapi.com/v1/",
   EMAIL_REG: /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/,
 
@@ -19,7 +19,7 @@ module.exports = {
       status: 400,
     },
     emailRegistered: {
-      code: "email-registered",
+      code: "email-already-registered",
       msg: "the email is already registered",
       status: 400,
     },

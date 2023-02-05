@@ -21,7 +21,7 @@ export default class Notifer {
     setTimeout(() => this.purgeExisting(), this.notifTimeout);
   }
 
-  sucess(title, text) {
+  success(title, text) {
     this.notify("notify--success", title, text)
   }
 
