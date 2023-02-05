@@ -24,6 +24,11 @@ nav {
   padding-block: .8rem;
 }
 
+.nav__brand {
+  color: var(--blue-2);
+  text-decoration: none;
+}
+
 h1,h2,h3,h4,span.brand {
   font-family: "Syne", Tahoma, sans-serif;
 }

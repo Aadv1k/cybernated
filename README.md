@@ -15,6 +15,6 @@ A customizable crypto-centric newsletter
   - implement server JS and CSS responses
   - ~~[TODO] Fix the javascript for the page; handle errors/success properly~~
     - Implemented a simple front-end [notifer API](./public/notifer.js) to handle status codes
-  - [TODO] Setup the 404 page with the same theme
+  - ~~[TODO] Setup the 404 page with the same theme~~
 - [ ] Find out sites with good crypto news and crypto pricings, prediction etc; SCRAPE them  
 - [ ] Send newsletters every morning with the updated DB of news
