@@ -16,4 +16,5 @@ A customizable crypto-centric newsletter
     - Implemented a simple front-end [notifer API](./public/notifer.js) to handle status codes
   - ~~[TODO] Setup the 404 page with the same theme~~
 - [ ] Find out sites with good crypto news and crypto pricings, prediction etc; SCRAPE them  
+  - Added Coindesk, theDefiant as sources for news; Add currency rates;
 - [ ] Send newsletters every morning with the updated DB of news

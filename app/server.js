@@ -5,8 +5,8 @@ const url = require("url");
 const ejs = require("ejs")
 
 const UserModel = require("../models/UserModel");
-const { isEmailValid, isEmailReal } = require("./validation");
-const {STATUS, MIME, MODE} = require("./constants");
+const { isEmailValid, isEmailReal } = require("./EmailValidator");
+const {STATUS, MIME, MODE} = require("./Constants");
 
 function sendJsonErr(res, errObj) {
   res.writeHead(errObj.status, { "Content-type": MIME.json });
