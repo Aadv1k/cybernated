@@ -1,0 +1,92 @@
+:root {
+  --bg-error: #e74c3c;
+  --bg-warn: #eab308;
+  --bg-success: #07bc0c;
+  --fg: white;
+  --notify-w: 200px;
+}
+
+
+.notify {
+  font-family: inherit;
+  padding: .5rem 1rem;
+  gap: .2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 3px;
+  color: var(--fg);
+  width: fit-content;
+  min-width: var(--notify-w);
+  left: 50%;
+  z-index: 999;
+  position: absolute;
+  transform: translateX(-50%) translateY(-100%);
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+
+.notify--appear {
+  animation-name: appear-above;
+  animation-duration: 200ms;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes appear-above {
+  0% {
+    transform: translateX(-50%) translateY(-100%);
+  }
+
+  25% {
+    transform: translateX(-50%) translateY(-75%);
+  }
+
+  50% {
+    transform: translateX(-50%) translateY(-50%);
+  }
+
+  75% {
+    transform: translateX(-50%) translateY(0%);
+  }
+
+  100% {
+    transform: translateX(-50%) translateY(10%);
+  }
+}
+
+.notify__title {
+  font-weight: bold;
+  font-size: .9rem;
+}
+
+.notify__content {
+  font-size: .9rem;
+}
+
+.notify--error {
+  background-color: var(--bg-error);
+}
+
+.notify--success {
+  background-color: var(--bg-success);
+}
+
+.notify--warn {
+  background-color: var(--bg-warn);
+}
+
+@media screen and (min-width: 400px) {
+  .notify {
+    padding: 1rem 1.3rem;
+  }
+
+.notify__title, .notify--content {
+  font-size: 1rem;
+}
+
+}
+
+

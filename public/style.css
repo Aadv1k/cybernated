@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;700&family=Syne:wght@700;800&display=swap');
+@import url('./notifier.css');
 
 :root  {
   --purple: #3F0071;
@@ -42,18 +43,6 @@ h1,h2,h3,h4,span.brand {
   overflow: hidden;
 }
 
-.hero .frm {
-  z-index: 2;
-  position: relative;
-}
-
-.frm::after {
-  content: attr(data-status);
-  top: 50%;
-  font-weight: bold;
-  font-family: Inter;
-  position: absolute;
-}
 
 .hero__title {
   text-align: center;
@@ -71,18 +60,21 @@ h1,h2,h3,h4,span.brand {
   position: absolute;
 }
 
-.frm {
+.reg-form {
   display: flex;
   height: 35px;
+  z-index: 2;
+  width: clamp(250px, 60%, 320px);
 }
 
 .frm__email {
   all: unset;
   border-radius: 100px 0 0 100px;
   background: var(--white);
-  color: black;
-  padding-inline: 1em;
+  color: #191919;
   font-size: .9rem;
+  padding-inline: .7rem;
+  width: 80%;
 }
 
 .frm__email::placeholder {
@@ -93,16 +85,17 @@ h1,h2,h3,h4,span.brand {
   all: unset;
   border-radius: 0 100px 100px 0;
   background-color: black;
+  width: 30%;
+  min-width: 40px;
   font-size: .9rem;
-  padding-inline: 1em;
-  width: 45px;
+  font-weight: bold;
   text-align: center;
 }
 
 .btn__loader {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
+  display: none;
+  width: 15px;
+  height: 15px;
   border: 3px solid #e8c4c4;
   border-radius: 50%;
   border-top-color: var(--white);
@@ -111,13 +104,24 @@ h1,h2,h3,h4,span.brand {
 }
 
 @keyframes spin {
-  to {
-    -webkit-transform: rotate(360deg);
+  0% {
+    transform: rotate(0deg);
   }
-}
-@-webkit-keyframes spin {
-  to {
-    -webkit-transform: rotate(360deg);
+
+  25% {
+    transform: rotate(90deg);
+  }
+
+  50% {
+    transform: rotate(180deg);
+  }
+
+  75% {
+    transform: rotate(270deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
   }
 }
 

@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title></title>
- <link rel="stylesheet" href="style.css" media="all">
- <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta charset="UTF-8">
+    <title></title>
+   <link rel="stylesheet" href="style.css" media="all">
+   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+   <script src="./notifier.js" type="module"></script>
+   <script src="./script.js" defer type="module"></script>
 </head>
 <body>
   <nav>
@@ -13,13 +15,13 @@
 
   <section class="hero">
     <h1 class="hero__title"> <span class="brand">Cybernated</span>: the news feed for everything crypto </h1>
-    <form action="" class="frm" id="regForm">
+    <form action="" class="reg-form" id="regForm">
       <input id="formInput" data-status="example error message" type="email"  name="email" class="frm__email" placeholder="Email" required>
-      <button type="submit" class="frm__submit" id="formBtn">
+      <button type="submit" class="frm__submit" id="formBtn"> 
+        <span class="btn__text" id="formBtnText">Go</span>
+        <span class="btn__loader" id="formBtnLoader"></span>
       </button>
     </form>
   </section>
 </body>
-
- <script src="./script.js" defer></script>
 </html>

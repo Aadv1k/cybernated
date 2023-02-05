@@ -33,6 +33,7 @@ module.exports = {
   MIME: {
     json: "application/json",
     html: "text/html",
-    css: "text/css"
+    css: "text/css",
+    js: "text/javascript"
   }
 }

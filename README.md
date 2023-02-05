@@ -10,10 +10,11 @@ A customizable crypto-centric newsletter
 - [x] ~~Implement a local "DB" and a wrapper module~~ 
   - implemented `./models/UserModel.js` which allows us to plug and play with database systems
   - currently we use `data.json` as a mock DB
-- [ ] A system to organize html; handle 404; CSS and JS handling
+- [x] A system to organize html; handle 404; CSS and JS handling
   - implement a fancy landing page, including cool CSS 
   - implement server JS and CSS responses
-  - [ ] Fix the javascript for the page; handle errors/success properly
-  - [ ] Setup the 404 page with the same theme
+  - ~~[TODO] Fix the javascript for the page; handle errors/success properly~~
+    - Implemented a simple front-end [notifer API](./public/notifer.js) to handle status codes
+  - [TODO] Setup the 404 page with the same theme
 - [ ] Find out sites with good crypto news and crypto pricings, prediction etc; SCRAPE them  
 - [ ] Send newsletters every morning with the updated DB of news

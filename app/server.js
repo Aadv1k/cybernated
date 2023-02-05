@@ -37,7 +37,7 @@ function handleJS(url, res) {
   const filename = url.split('/').pop();
   if (existsSync(`./public/${filename}`)) {
     let file = readFileSync(`./public/${filename}`)
-    res.writeHead(200, {"Content-type" : MIME.css})
+    res.writeHead(200, {"Content-type" : MIME.js})
     res.write(file);
   } else {
     handle404(res);
