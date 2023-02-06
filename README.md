@@ -38,8 +38,7 @@ example response:
     - Implemented a simple front-end [notifer API](./public/notifer.js) to handle status codes
   - ~~[TODO] Setup the 404 page with the same theme~~
 - [x] Implement mongoDB service to store emails and data
-
-- [ ] Find out sites with good crypto news and crypto pricings, prediction etc; SCRAPE them  
+- [x] Find out sites with good crypto news and crypto pricings, prediction etc; SCRAPE them  
   - Added Coindesk, theDefiant as sources for news; Add currency rates;
-  - [TODO] Figure out a way to systematically add these to our database
+  - ~~[TODO] Figure out a way to systematically add these to our database~~
 - [ ] Send newsletters every morning with the updated DB of news
