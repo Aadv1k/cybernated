@@ -1,14 +1,13 @@
 // don't sue pls //
 const https = require("https");
 const qs = require("querystring");
-const {writeFileSync} = require("fs");
 const url = require("url");
+const cheerio = require("cheerio");
+const NewsModel = require("../models/NewsModel.js")
 
-function getCurrencyExchangeRates() {
-  const url = "https://production.api.coindesk.com/v2/exchange-rates"
-}
+//function getCurrencyExchangeRates() { const url = "https://production.api.coindesk.com/v2/exchange-rates" }
 
-function getCoinRates() {
+function getCoinPrices() {
   const url = "https://ticker-api.cointelegraph.com/rates/";
   let data = "";
 
@@ -27,28 +26,75 @@ function getCoinRates() {
   })
 }
 
+
 function scrapeTheDefiant() {
-  const url = "https://thedefiant.io/_next/data/Ir74lIcOsMySgYfKv21l0/category/news.json?slug=news";
-  const siteURL = "https://thedefiant.io/"
-  let data = "";
+  const siteURL = "https://thedefiant.io";
+  let html = "";
+  let finalData = [];
 
   return new Promise((resolve, reject) => {
-    https.get(url, (res) => {
-      res.on("data", d => data += d);
+    https.get(siteURL, (res) => {
+      res.on("data", d => html += d);
       res.on("end", () => {
-        let parsed = JSON.parse(data);
-        let dat = parsed.pageProps.data.trending.map(e => {
-          return {
-            title: e.title, 
-            url: siteURL + e.uri,
-            date: e.date,
-            img: e.featuredImage.src
-          }
-        });
-        resolve(dat);
+        const $ = cheerio.load(html);
+        const latestStories = $('#__next > main > div.mb-14 > section:nth-child(1) > div');
+        latestStories.children().each((idx, elem) => {
+          const tag = $(elem).find('a').text();
+          const title = $(elem).find('div > a > h3').text();
+          const url = $(elem).find('a:nth-child(2)').attr('href');
+
+          if (!tag.toLowerCase().includes("news")) return;
+
+          finalData.push({
+            title: title,
+            url: siteURL + url,
+            source: "thedefiant"
+          })
+        })
+        resolve(finalData);
       });
     })
   })
+}
+
+function scrapeTheCoinTelegraph() {
+  const siteURL = "https://cointelegraph.com/"
+  let html = "";
+  let finalData = [];
+
+  return new Promise((resolve, reject) => {
+    https.get(siteURL, (res) => {
+      res.on("data", d => html += d);
+      res.on("end", () => {
+
+        const $ = cheerio.load(html);
+        const editorsChoice = $('#__layout > div > div.layout__wrp > main > div > div > div.main-page__hero > div.main-news__row > div.main-news-controls > ul')
+        const articles = $('#__layout > div > div.layout__wrp > main > div > div > div.main-page__posts > div > ul')
+
+        editorsChoice.children().each((idx, elem) => {
+          const item = $(elem).find('div').find('a');
+          finalData.push({
+            title: item.text(),
+            url: siteURL + item.attr('href'),
+            source: "cointelegraph"
+          })
+        })
+
+        articles.children().each((idx, elem) => {
+          const item = $(elem).find('header').find('a');
+          const tag = $(elem).find('span.post-card__badge').text();
+          if (tag.toLowerCase().trim() != "news") return;
+          finalData.push({
+            title: item.text(),
+            url: siteURL + item.attr('href'),
+            source: "cointelegraph"
+          })
+        })
+        resolve(finalData);
+      });
+    })
+  })
+
 }
 
 function scrapeCoindesk() {
@@ -67,7 +113,8 @@ function scrapeCoindesk() {
           return {
             title: e.title, 
             url: siteURL + e.url,
-            date: e.date
+            date: e.date,
+            source: "coindesk"
           }
         });
         resolve(dat);
@@ -76,13 +123,17 @@ function scrapeCoindesk() {
   })
 }
 
-function generateJsonForAllData() {
-  return new Promise((resolve, reject) => {
-    Promise.all([scrapeTheDefiant(), scrapeCoindesk(), getCoinRates()]).then(data => {
-      resolve({theDefiant: data[0], coinDesk: data[1], rates: data[2]});
-    })
-  }) 
+async function pushDataToDatabase() {
+  const db = new NewsModel();
+  await db.init();
 
+  let data1 = await scrapeCoindesk();
+  let data2 = await scrapeTheDefiant();
+  let data3 = await scrapeTheCoinTelegraph();
+  await db.pushNews([...data1.slice(0, 5), ...data2.slice(0, 5), ...data3.slice(0, 5)]);
+  let coinPrice = await getCoinPrices();
+  await db.pushPrices(coinPrice);
+  await db.close();
 }
 
-//generateJsonForAllData().then(e => writeFileSync("./news.json", JSON.stringify(e)))
+module.exports = pushDataToDatabase;

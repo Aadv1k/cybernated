@@ -10,6 +10,7 @@
   "author": "Aadv1k <aadv1k@outlook.com>",
   "license": "MIT",
   "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
     "dotenv": "^16.0.3",
     "ejs": "^3.1.8",
     "mongodb": "^5.0.0",
