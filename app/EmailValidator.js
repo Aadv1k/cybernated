@@ -1,5 +1,5 @@
 const https = require('https');
-const consts = require('./constants');
+const consts = require('./Constants');
 
 function isEmailReal(email) {
   return new Promise((resolve, reject) => {

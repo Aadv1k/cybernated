@@ -1,51 +1,46 @@
-const {readFileSync, writeFileSync, existsSync} = require("fs");
+const { MONGO_ATLAS_USER, MONGO_ATLAS_PWD } = require("../app/Constants.js");
+const { MongoClient } = require("mongodb");
+
+const atlasURL = `mongodb+srv://${MONGO_ATLAS_USER}:${MONGO_ATLAS_PWD}@cybr-user-list.vtqs3hz.mongodb.net/?retryWrites=true&w=majority`
+const DB_NAME = "users"
+const COLLECTION_NAME = "users"
 
 class UserModel {
   constructor() {
-    let exists = existsSync("data.json")
-    if (!exists) writeFileSync("data.json", "[]");
-    let file = readFileSync("data.json");
-
-    try {
-      this.db = JSON.parse(file);
-    } catch (err) {
-      this.db = [];
-    }
+    this.client = new MongoClient(atlasURL);
+    this.db = null;
+    this.users = null;
   }
 
-  pushUser(userEmail, userSites) {
-    this.db.push({
+  async init() {
+    await this.client.connect();
+    this.db = this.client.db(DB_NAME);
+    this.users = this.db.collection(COLLECTION_NAME);
+  }
+
+  async pushUser(userEmail) {
+    await this.users.insertOne({
       email: userEmail, 
-      sites: userSites
     })
-    return this.db;
   }
 
-  rmUser(userEmail) {
-    let idx = this.db.findIndex(e => e.email == userEmail)
-    if (idx) this.db.splice(idx, 1);
-    return this.db;
+  async rmUser(userEmail) {
+    await this.users.deleteOne({email: userEmail})
   }
 
-  updateUser(oldEmail, newData) {
-    let idx = this.db.findIndex(e => e.email == oldEmail)
-    if (!idx) return undefined;
-    this.db[idx] = newData;
-    return this.db;
+  async getUsers() {
+    const data = await this.users.find({}).toArray();
+    return data;
   }
 
-  getUsers() {
-    return this.db;
-  }
-
-  userExists(userEmail) {
-    let elem = this.db.find(e => e.email == userEmail)
+  async userExists(userEmail) {
+    let elem = await this.users.findOne({email: userEmail});
     if (elem) return true;
     return false;
   }
 
-  close() {
-    writeFileSync("./data.json", JSON.stringify(this.db));
+  async close() {
+    await this.client.close();
   }
 }
 module.exports = UserModel;

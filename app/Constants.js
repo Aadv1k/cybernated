@@ -4,8 +4,12 @@ module.exports = {
   PORT: process.env.PORT || 4000,
   MODE: process.env.NODE_ENV || "development",
   ABSTRACT_API_KEY: process.env.ABSTRACT_API_KEY,
+  MONGO_ATLAS_PWD: process.env.MONGO_ATLAS_PWD,
+  MONGO_ATLAS_USER: process.env.MONGO_ATLAS_USER,
+
   ABSTRACT_API_URL: "https://emailvalidation.abstractapi.com/v1/",
   EMAIL_REG: /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/,
+
 
   STATUS: {
     emailNotExist: {

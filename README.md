@@ -17,4 +17,5 @@ A customizable crypto-centric newsletter
   - ~~[TODO] Setup the 404 page with the same theme~~
 - [ ] Find out sites with good crypto news and crypto pricings, prediction etc; SCRAPE them  
   - Added Coindesk, theDefiant as sources for news; Add currency rates;
+- [ ] Implement mongoDB service to store emails and data
 - [ ] Send newsletters every morning with the updated DB of news

@@ -14,12 +14,9 @@ function sendJsonErr(res, errObj) {
 }
 
 function handleIndex(res) {
-  const db = new UserModel();
-  const users = db.getUsers();
-
   res.writeHead(200, { "Content-type": MIME.html });
 
-  ejs.renderFile("./views/index.ejs", {users: users}, (err, htmlStr) => {
+  ejs.renderFile("./views/index.ejs", {}, (err, htmlStr) => {
     if (err) console.error(err);
     res.write(htmlStr);
   })
@@ -60,13 +57,15 @@ async function handleRegister(reqURL, res) {
   let regEmail = registerParams.get("email");
 
   const db = new UserModel();
+  await db.init();
 
   if (!regEmail) {
     sendJsonErr(res, STATUS.emailInvalid);
     return;
   }
 
-  if (db.userExists(regEmail)) {
+  const emailExists = await db.userExists(regEmail);
+  if (emailExists) {
     sendJsonErr(res, STATUS.emailRegistered)
     return;
   }
@@ -94,11 +93,10 @@ async function handleRegister(reqURL, res) {
     }
   }
 
-  db.pushUser(regEmail, []);
-
+  await db.pushUser(regEmail);
   res.writeHead(200, { "Content-type": MIME.json });
   res.write(JSON.stringify({code: "email-registered", message: "the email was registered successfully"}));
-  db.close();
+  await db.close();
 }
 
 const server = http.createServer(async (req, res) => {
