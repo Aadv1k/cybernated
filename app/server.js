@@ -17,7 +17,6 @@ function sendJsonErr(res, errObj) {
 
 async function handleIndex(res) {
   res.writeHead(200, { "Content-type": MIME.html });
-
   const db = new NewsModel();
   await db.init();
   const news = await db.getNews();
@@ -35,22 +34,19 @@ function handle404(res) {
   })
 }
 
-function handleJS(url, res) {
-  const filename = url.split('/').pop();
-  if (existsSync(`./public/${filename}`)) {
-    let file = readFileSync(`./public/${filename}`)
-    res.writeHead(200, {"Content-type" : MIME.js})
-    res.write(file);
-  } else {
-    handle404(res);
-  }
-}
 
-function handleCSS(url, res) {
+function handleFilepath(url, res) {
   const filename = url.split('/').pop();
+  const ext = filename.split('.').pop();
+
+  if (!MIME[ext]) {
+    handle404(res) 
+    return
+  };
+
   if (existsSync(`./public/${filename}`)) {
     let file = readFileSync(`./public/${filename}`)
-    res.writeHead(200, {"Content-type" : MIME.css})
+    res.writeHead(200, {"Content-type" : MIME[ext]})
     res.write(file);
   } else {
     handle404(res);
@@ -67,13 +63,43 @@ async function sendWelcomeEmail(email) {
   await db.close();
 }
 
+async function handleDeregister(reqURL, res) {
+  let registerURL = new URL("https://example.com/" + reqURL);
+  let registerParams = registerURL.searchParams;
+  let regEmail = registerParams.get("email");
+  const db = new UserModel();
+  await db.init()
+
+  if (!regEmail) {
+    sendJsonErr(res, STATUS.emailInvalid);
+    return;
+  }
+
+  const emailExists = await db.userExists(regEmail);
+  if (!emailExists) {
+    sendJsonErr(res, STATUS.invalidUserToDeregister);
+    return;
+  }
+
+  await db.rmUser(regEmail);
+  sendJsonErr(res, STATUS.emailDeregistered);
+  await db.close();
+}
+
 async function handleRegister(reqURL, res) {
   let registerURL = new URL("https://example.com/" + reqURL);
   let registerParams = registerURL.searchParams;
   let regEmail = registerParams.get("email");
 
   const db = new UserModel();
-  await db.init();
+  try {
+    await db.init();
+  } catch (err) {
+      sendJsonErr(
+        res,
+        STATUS.internalError
+      );
+  }
 
   if (!regEmail) {
     sendJsonErr(res, STATUS.emailInvalid);
@@ -82,7 +108,7 @@ async function handleRegister(reqURL, res) {
 
   const emailExists = await db.userExists(regEmail);
   if (emailExists) {
-    sendJsonErr(res, STATUS.emailRegistered)
+    sendJsonErr(res, STATUS.emailExists)
     return;
   }
 
@@ -108,9 +134,10 @@ async function handleRegister(reqURL, res) {
       return;
     }
   }
+
   await db.pushUser(regEmail);
   res.writeHead(200, { "Content-type": MIME.json });
-  res.write(JSON.stringify({code: "email-registered", message: "SUCCESS! check your inbox", status: 200}));
+  sendJsonErr(res, STATUS.emailRegistered);
   await sendWelcomeEmail(regEmail);
   await db.close();
 }
@@ -119,14 +146,14 @@ const server = http.createServer(async (req, res) => {
   const url = req.url;
   const ext = req.url.split('.').pop();
 
-  if (url === "/") {
+  if (url === "/" || url === "/index") {
     await handleIndex(res);
   } else if (url.startsWith("/register")) {
     await handleRegister(url, res);
-  } else if (ext === "css") {
-    handleCSS(url, res);
-  } else if (ext === "js") {
-    handleJS(url, res);
+  } else if (url.startsWith("/deregister")) {
+    await handleDeregister(url, res)
+  } else if (ext) {
+    handleFilepath(url, res);
   } else {
     handle404(res);
   }

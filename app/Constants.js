@@ -19,8 +19,14 @@ module.exports = {
       code: "email-registered",
       msg: "the email was registered successfully",
       status: 200,
-
     },
+
+    emailDeregistered: {
+      code: "email-deregistered",
+      msg: "the email was deregistered successfully",
+      status: 200,
+    },
+
     fakeEmail: {
       code: "fake-email",
       msg: "the email provided is not a real address",
@@ -31,11 +37,19 @@ module.exports = {
       msg: "the email provided is invalid",
       status: 400,
     },
-    emailRegistered: {
-      code: "email-already-registered",
+
+    emailExists: {
+      code: "email-exists",
       msg: "the email is already registered",
       status: 400,
     },
+
+    invalidUserToDeregister: {
+      code: "invalid-user-to-deregister",
+      msg: "the user doesn't exist and hence cannot be deregistered",
+      code: 400
+    },
+
     internalError: {
       code: "internal-err",
       msg: "something went wrong on our end",

@@ -34,10 +34,14 @@ The app uses vanilla JavaScript and a simple [Notifier API](./public/notifier.js
 
 ## API
 
-### `/register`
-- `?email=`: a real valid email address
+### `/register?`
+- `email=`: a real valid email address
   - the email is first validated through a syntax check 
   - in `production` the email is passed through [abstract API](https://www.abstractapi.com/) to ensure the address is real
+
+### `/deregister?`
+- `email=`: a real valid email address
+  - will remove the email from the database if it exists will raise a `invalid-user-to-deregister`
 
 ### Response
 
@@ -51,10 +55,13 @@ example response:
 ```
 
 - 200 `email-registered`: the email was registered successfully
+- 200 `email-deregistered`: the email was deregistered successfully
 - 400 `fake-email`: the email provided is not a real address
 - 400 `email-invalid`: the email is syntactically invalid 
-- 400 `email-already-registered`: the email already exists in the database
+- 400 `email-exists`: the email already exists in the database
+- 400 `invalid-user-to-deregister`: attempt to deregister a non-existent user
 - 500 `internal-err`: in this context, it may mean that email validation via [abstract API](https://www.abstractapi.com/) failed
+invalid-user-to-deregister
 
 ## log
 

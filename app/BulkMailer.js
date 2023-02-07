@@ -37,6 +37,8 @@ async function mailAndPush() {
   const news = await newsdb.getNews();
   const prices = await newsdb.getPrices();
 
+
+  console.log(news);
   const date = new Date();
   let month = date.getMonth() + 1;
   let day = date.getDate();

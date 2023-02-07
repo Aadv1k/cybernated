@@ -4,6 +4,7 @@ const qs = require("querystring");
 const url = require("url");
 const cheerio = require("cheerio");
 const NewsModel = require("../models/NewsModel.js")
+const { requestCloudflare } = require('request-cloudflare');
 
 //function getCurrencyExchangeRates() { const url = "https://production.api.coindesk.com/v2/exchange-rates" }
 
@@ -31,6 +32,26 @@ function getCoinPrices() {
   })
 }
 
+
+function scrapeTheBlock() {
+  const siteURL = "https://theblock.co/";
+  let html = "";
+  let finalData = [];
+
+  return new Promise((resolve, reject) => {
+    requestCloudflare.get(siteURL + "/latest", (err, res, body) => {
+      const $ = cheerio.load(body);
+      const latestStories = $('#__layout > div > section > section > div.collectionFeed > div.collectionLatest');
+      latestStories.children().each((idx, elem) => {
+        const tag = $(elem).find('a').text();
+        const title = $(elem).find('div > .headline > a > h2 > span').text();
+        const url = $(elem).find('a').attr('href');
+        finalData.push({ title: title, url: siteURL + url, source: "theblock" })
+      })
+      resolve(finalData);
+    }, {})
+  })
+}
 
 function scrapeTheDefiant() {
   const siteURL = "https://thedefiant.io";
@@ -129,13 +150,22 @@ function scrapeCoindesk() {
   })
 }
 
+(async () => {
+})()
+
 async function getNewsData() {
   let data1 = await scrapeCoindesk();
   let data2 = await scrapeTheDefiant();
   let data3 = await scrapeTheCoinTelegraph();
+  let data4 = await scrapeTheBlock();
 
   return new Promise((resolve, reject) => {
-    resolve([...data1.slice(0, 8), ...data2.slice(0, 8), ...data3.slice(0, 8)]);
+    resolve([
+      ...data1.slice(0, 8), 
+      ...data2.slice(0, 8), 
+      ...data3.slice(0, 8), 
+      ...data4.slice(0, 8)
+  ]);
   })
 }
 

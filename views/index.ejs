@@ -38,6 +38,17 @@
         <% } %>
       </ul>
 
+      <span class="news__title">TheBlock</span>
+      <ul class="news__theblock">
+        <% for (const dat of news) {%>
+        <% if (dat.source.toLowerCase() === "theblock") {%>
+            <li>
+              <a class="news__link" target="_blank" href="<%=dat.url%>"><%=dat.title%></a>
+            </li>
+          <% } %>
+        <% } %>
+      </ul>
+
       <span class="news__title">TheDefiant</span>
       <ul class="news__thedefiant">
         <% for (const dat of news) {%>

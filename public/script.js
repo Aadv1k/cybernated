@@ -43,7 +43,7 @@ regForm.addEventListener("submit", async (e) => {
     return;
   };
 
-  if (data.code === "email-already-registered") {
+  if (data.code === "email-exists") {
     notifier.error("Error!", "the email is already registered");
   } else if (data.code === "email-invalid") {
     notifier.error("Error!", "the email is invalid");
