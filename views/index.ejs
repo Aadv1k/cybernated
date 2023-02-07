@@ -16,12 +16,53 @@
   <section class="hero">
     <h1 class="hero__title"> <span class="brand">Cybernated</span>: the news feed for everything crypto </h1>
     <form action="" class="reg-form" id="regForm">
-      <input id="formInput" data-status="example error message" type="email"  name="email" class="frm__email" placeholder="Email" required>
+      <input id="formInput" type="email"  name="email" class="frm__email" placeholder="Sign up" required>
       <button type="submit" class="frm__submit" id="formBtn"> 
         <span class="btn__text" id="formBtnText">Go</span>
         <span class="btn__loader" id="formBtnLoader"></span>
       </button>
     </form>
+  </section>
+
+  <section class="content">
+    <h1 class="content__title">Latest feed</h1>
+    <div class="news">
+
+      <span class="news__title">Coindesk</span>
+      <ul class="news__coindesk">
+        <% for (const dat of news) {%>
+        <% if (dat.source.toLowerCase() === "coindesk") {%>
+            <li>
+              <a class="news__link" target="_blank" href="<%=dat.url%>"><%=dat.title%></a>
+            </li>
+          <% } %>
+        <% } %>
+      </ul>
+
+      <span class="news__title">TheDefiant</span>
+      <ul class="news__thedefiant">
+        <% for (const dat of news) {%>
+        <% if (dat.source.toLowerCase() === "thedefiant") {%>
+            <li>
+              <a class="news__link" target="_blank" href="<%=dat.url%>"><%=dat.title%></a>
+            </li>
+          <% } %>
+        <% } %>
+      </ul>
+
+      <span class="news__title">cointelegraph</span>
+      <ul class="news__cointelegraph">
+        <% for (const dat of news) {%>
+        <% if (dat.source.toLowerCase() === "cointelegraph") {%>
+            <li>
+              <a class="news__link" target="_blank" href="<%=dat.url%>"><%=dat.title%></a>
+            </li>
+          <% } %>
+        <% } %>
+      </ul>
+
+
+    </div>
   </section>
 </body>
 </html>

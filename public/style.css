@@ -21,7 +21,7 @@ nav {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-block: .8rem;
+  padding-block: .5rem;
 }
 
 .nav__brand {
@@ -144,6 +144,49 @@ h1,h2,h3,h4,span.brand {
   top: -50%;
   left: -10%;
   background-color: var(--pink);
+}
+
+.content {
+  margin-block: 1rem;
+}
+
+.content__title {
+  color: var(--blue-2);
+  text-align: center;
+  font-size: 2rem;
+}
+
+.news {
+  max-width: 1000px;
+  margin: 0 auto;
+  width: 95%;
+}
+
+.news > ul {
+  padding-inline: 1rem;
+}
+
+.news > ul li {
+  margin-block: .5rem;
+}
+
+.news__link {
+  color: var(--blue-1);
+  text-decoration: none;
+  line-height: 1.5;
+}
+
+.news__title {
+  padding: .2rem;
+  display: block;
+  margin-block: 1rem;
+  font-family: "Syne", Tahoma, sans-serif;
+  width: 100%;
+  border-radius: 2px;
+  background: var(--pink);
+  font-weight: bold;
+  color: white;
+  text-transform: uppercase;
 }
 
 @media screen and (min-width: 800px) {

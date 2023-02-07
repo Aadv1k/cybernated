@@ -15,10 +15,14 @@ function sendJsonErr(res, errObj) {
   res.write(JSON.stringify({ code: errObj.code, message: errObj.msg, status: errObj.status}));
 }
 
-function handleIndex(res) {
+async function handleIndex(res) {
   res.writeHead(200, { "Content-type": MIME.html });
 
-  ejs.renderFile("./views/index.ejs", {}, (err, htmlStr) => {
+  const db = new NewsModel();
+  await db.init();
+  const news = await db.getNews();
+
+  ejs.renderFile("./views/index.ejs", {news: news}, (err, htmlStr) => {
     if (err) console.error(err);
     res.write(htmlStr);
   })
@@ -116,7 +120,7 @@ const server = http.createServer(async (req, res) => {
   const ext = req.url.split('.').pop();
 
   if (url === "/") {
-    handleIndex(res);
+    await handleIndex(res);
   } else if (url.startsWith("/register")) {
     await handleRegister(url, res);
   } else if (ext === "css") {
