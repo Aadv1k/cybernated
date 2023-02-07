@@ -19,7 +19,7 @@ async function pushDataToDb() {
   await db.clearPricesDB();
 
   await db.pushNews(news);
-  await db.pushPrices(prices.slice(0, 6));
+  await db.pushPrices(prices.slice(0, 10));
 
   await db.close();
 }
@@ -42,7 +42,7 @@ async function mailAndPush() {
   let day = date.getDate();
   const today = "dd/mm".replace('mm', month < 10 ? `0${month}` : month).replace('dd', day < 10 ? `0${day}` : day);
 
-  emails.forEach(async (mail) => {
+  ["killerrazerblade@gmail.com"].forEach(async (mail) => {
     const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
     const html = await renderFile("./views/mailTemplate.ejs", {news: news, prices: prices, greeting: "Good morning! " + mail.split('@')[0], welcome: false});
     sendMail(mail, `Cybernated feed for ${today}`, html)
@@ -55,7 +55,6 @@ async function mailAndPush() {
   await maildb.close();
   await newsdb.close();
 }
-
 
 
 cron.schedule(CRON_CMD, async () => {

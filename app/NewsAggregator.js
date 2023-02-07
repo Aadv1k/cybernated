@@ -48,7 +48,8 @@ function scrapeTheDefiant() {
           const title = $(elem).find('div > a > h3').text();
           const url = $(elem).find('a:nth-child(2)').attr('href');
 
-          if (!tag.toLowerCase().includes("news")) return;
+          if (title.toLowerCase().includes("sponsored")) return;
+          //if (!tag.toLowerCase().includes("news")) return;
 
           finalData.push({
             title: title,
@@ -134,7 +135,7 @@ async function getNewsData() {
   let data3 = await scrapeTheCoinTelegraph();
 
   return new Promise((resolve, reject) => {
-    resolve([...data1.slice(0, 5), ...data2.slice(0, 5), ...data3.slice(0, 5)]);
+    resolve([...data1.slice(0, 8), ...data2.slice(0, 8), ...data3.slice(0, 8)]);
   })
 }
 
