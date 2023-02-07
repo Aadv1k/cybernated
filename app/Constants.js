@@ -47,7 +47,7 @@ module.exports = {
     invalidUserToDeregister: {
       code: "invalid-user-to-deregister",
       msg: "the user doesn't exist and hence cannot be deregistered",
-      code: 400
+      status: 400
     },
 
     internalError: {
