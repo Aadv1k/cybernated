@@ -25,6 +25,10 @@ class NewsModel {
     await this.news.insertMany(data)
   }
 
+  async clearNewsDB() {
+    await this.news.deleteMany({});
+  }
+
   async pushPrices(data) {
     await this.prices.insertMany(data)
   }

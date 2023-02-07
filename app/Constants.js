@@ -6,9 +6,13 @@ module.exports = {
   ABSTRACT_API_KEY: process.env.ABSTRACT_API_KEY,
   MONGO_ATLAS_PWD: process.env.MONGO_ATLAS_PWD,
   MONGO_ATLAS_USER: process.env.MONGO_ATLAS_USER,
+  MAIL_ADDR: process.env.MAIL_ADDR,
+  MAIL_PWD: process.env.MAIL_PWD,
 
   ABSTRACT_API_URL: "https://emailvalidation.abstractapi.com/v1/",
   EMAIL_REG: /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/,
+  CRON_TIMEZONE: "Asia/Kolkata",
+  CRON_CMD: "00 07 * * *" // 7 AM IST
 
 
   STATUS: {

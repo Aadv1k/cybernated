@@ -48,14 +48,6 @@ h1,h2,h3,h4,span.brand {
   overflow: hidden;
 }
 
-
-.hero__title {
-  text-align: center;
-  z-index: 3;
-  font-size: 2rem;
-  max-width: 25ch;
-}
-
 .hero::before, .hero::after {
   content: "";
   width: 300px;
@@ -63,6 +55,14 @@ h1,h2,h3,h4,span.brand {
   z-index: 1;
   filter: blur(80px);
   position: absolute;
+}
+
+
+.hero__title {
+  text-align: center;
+  z-index: 3;
+  font-size: 2rem;
+  max-width: 25ch;
 }
 
 .reg-form {

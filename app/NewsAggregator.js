@@ -123,17 +123,14 @@ function scrapeCoindesk() {
   })
 }
 
-async function pushDataToDatabase() {
-  const db = new NewsModel();
-  await db.init();
-
+async function getNewsData() {
   let data1 = await scrapeCoindesk();
   let data2 = await scrapeTheDefiant();
   let data3 = await scrapeTheCoinTelegraph();
-  await db.pushNews([...data1.slice(0, 5), ...data2.slice(0, 5), ...data3.slice(0, 5)]);
-  let coinPrice = await getCoinPrices();
-  await db.pushPrices(coinPrice);
-  await db.close();
+
+  return new Promise((resolve, reject) => {
+    resolve([...data1.slice(0, 5), ...data2.slice(0, 5), ...data3.slice(0, 5)]);
+  })
 }
 
-module.exports = pushDataToDatabase;
+module.exports = {getNewsData};

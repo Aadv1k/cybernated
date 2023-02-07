@@ -42,3 +42,5 @@ example response:
   - Added Coindesk, theDefiant as sources for news; Add currency rates;
   - ~~[TODO] Figure out a way to systematically add these to our database~~
 - [ ] Send newsletters every morning with the updated DB of news
+  - Setup a email template [./views/emailTemplate.ejs](./views/emailTemplate.ejs)
+  - Setup a cron scheduler
