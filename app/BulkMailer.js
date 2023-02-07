@@ -44,17 +44,12 @@ async function mailAndPush() {
 
   emails.forEach(async (mail) => {
     const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
-    const html = await renderFile("./views/mailTemplate.ejs", {news: news, prices: prices, greeting: "Good morning! " + mail.split('@')[0]});
-
-    console.log(html);
-
-    /*
+    const html = await renderFile("./views/mailTemplate.ejs", {news: news, prices: prices, greeting: "Good morning! " + mail.split('@')[0], welcome: false});
     sendMail(mail, `Cybernated feed for ${today}`, html)
       .then((suc) => { console.log("[INFO] Sent mail to", mail)})
       .catch(err => { console.error(`[ERROR] Couldn't send to ${mail} due to ${err}`) 
       })
     await delay(3000)
-  */
   });
 
   await maildb.close();
@@ -62,12 +57,6 @@ async function mailAndPush() {
 }
 
 
-(async() => {
-  await pushDataToDb();
-  await mailAndPush();
-})()
-
-/*
 
 cron.schedule(CRON_CMD, async () => {
   console.log("[INFO] Cron job started")
@@ -78,4 +67,3 @@ cron.schedule(CRON_CMD, async () => {
    scheduled: true,
    timezone:CRON_TIMEZONE
 });
-*/
