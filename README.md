@@ -1,7 +1,6 @@
-# cybernated
+# cybernated 🤖
 
-A news-aggregator newsletter built from scratch
-
+A news-aggregator email subscription service built from scratch
 
 ## Install
 
@@ -15,7 +14,7 @@ this will start a server and a cron job in the background.
 
 ### backend / server
 
-The app uses a watered down version of MVC
+The app uses a watered down version of the [MVC](https://www.tutorialspoint.com/mvc_framework/mvc_framework_introduction.htm) framework. Here is a walkthrough of the project alongside the basic functionality
 
 - We use `mongodb` and [atlas](https://www.mongodb.com/atlas) as our database; [`./models`](./models)
   - [`./models/NewsModel.js`](./models/NewsModel.js) the atlas cluster has a `newsdb` DB with `coinPrices`, `news` as two collections
@@ -30,7 +29,7 @@ All the "config" is located at [`./app/Constants.js`](./app/Constants.js)
 
 ### frontend
 
-The app uses vanilla JavaScript and a simple [Notifier API](./public/notifer.js)
+The app uses vanilla JavaScript and a simple [Notifier API](./public/notifier.js)
 
 ## API
 
