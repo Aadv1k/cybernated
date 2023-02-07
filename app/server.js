@@ -5,12 +5,14 @@ const url = require("url");
 const ejs = require("ejs")
 
 const UserModel = require("../models/UserModel");
+const NewsModel = require("../models/NewsModel");
 const { isEmailValid, isEmailReal } = require("./EmailValidator");
+const sendMail = require("./Mailer");
 const {STATUS, MIME, MODE} = require("./Constants");
 
 function sendJsonErr(res, errObj) {
   res.writeHead(errObj.status, { "Content-type": MIME.json });
-  res.write(JSON.stringify({ code: errObj.code, message: errObj.msg }));
+  res.write(JSON.stringify({ code: errObj.code, message: errObj.msg, status: errObj.status}));
 }
 
 function handleIndex(res) {
@@ -51,6 +53,15 @@ function handleCSS(url, res) {
   }
 }
 
+async function sendWelcomeEmail(email) {
+  const db = new NewsModel();
+  await db.init()
+  const data = await db.getNews();
+  const html = await ejs.renderFile("./views/welcomeMailTemplate.ejs", {data: data});
+  sendMail(email, "Welcome to cybernated!", html);
+  await db.close();
+}
+
 async function handleRegister(reqURL, res) {
   let registerURL = new URL("https://example.com/" + reqURL);
   let registerParams = registerURL.searchParams;
@@ -75,13 +86,13 @@ async function handleRegister(reqURL, res) {
     sendJsonErr(res, STATUS.emailInvalid)
     return;
   }
-
+  
   // we do not waste our API calls in development mode; we can trust devs to test with real emails
   if (MODE == "production") {
     try {
       const emailReal = await isEmailReal(regEmail);
       if (!emailReal) {
-        sendJsonErr(res, STATUS.emailInvalid)
+        sendJsonErr(res, STATUS.fakeEmail)
         return;
       }
     } catch (err) {
@@ -94,7 +105,8 @@ async function handleRegister(reqURL, res) {
   }
   await db.pushUser(regEmail);
   res.writeHead(200, { "Content-type": MIME.json });
-  res.write(JSON.stringify({code: "email-registered", message: "the email was registered successfully"}));
+  res.write(JSON.stringify({code: "email-registered", message: "the email was registered successfully", status: 200}));
+  await sendWelcomeEmail(regEmail);
   await db.close();
 }
 

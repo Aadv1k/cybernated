@@ -14,11 +14,16 @@ module.exports = {
   CRON_TIMEZONE: "Asia/Kolkata",
   CRON_CMD: "00 07 * * *", // 7 AM IST
 
-
   STATUS: {
-    emailNotExist: {
-      code: "email-not-exist",
-      msg: "the email does not exist",
+    emailRegistered: {
+      code: "email-registered",
+      msg: "the email was registered successfully",
+      status: 200,
+
+    },
+    fakeEmail: {
+      code: "fake-email",
+      msg: "the email provided is not a real address",
       status: 400,
     },
     emailInvalid: {

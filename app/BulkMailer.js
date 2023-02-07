@@ -47,7 +47,6 @@ async function mailAndPush() {
 }
 
 
-
 cron.schedule(CRON_CMD, async () => {
   console.log("[INFO] Cron job started")
   await pushNewsDataToDb();
@@ -57,3 +56,4 @@ cron.schedule(CRON_CMD, async () => {
    scheduled: true,
    timezone:CRON_TIMEZONE
 });
+

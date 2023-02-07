@@ -19,7 +19,6 @@ function hideLoader() {
   formBtnText.style.display = "inline-block";
 }
 
-
 let emailsToAvoid = []; 
 
 const notifier = new Notifier(2500);
@@ -35,7 +34,6 @@ regForm.addEventListener("submit", async (e) => {
     return;
   }
 
-
   const res = await fetch(`/register?email=${email}`);
   let data = await res.json();
 
@@ -45,15 +43,14 @@ regForm.addEventListener("submit", async (e) => {
     return;
   };
 
-  
-
   if (data.code === "email-already-registered") {
     notifier.error("Error!", "the email is already registered");
   } else if (data.code === "email-invalid") {
     notifier.error("Error!", "the email is invalid");
     emailsToAvoid.push(email);
-  } else if (data.code === "email-not-exist") {
+  } else if (data.code === "fake-email") {
     notifier.error("Error!", "you need to provide a real email");
+    emailsToAvoid.push(email);
   } else {
     notifier.error("Internal error", "try again later");
   }
