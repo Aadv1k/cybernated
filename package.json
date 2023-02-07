@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --forceExit",
-    "start": "node index"
+    "start": "node index.js & node ./app/BulkMailer.js"
   },
   "author": "Aadv1k <aadv1k@outlook.com>",
   "license": "MIT",
