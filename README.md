@@ -1,6 +1,36 @@
 # cybernated
 
-A customizable crypto-centric newsletter
+A news-aggregator newsletter built from scratch
+
+
+## Install
+
+```shell
+npm install
+npm start
+```
+this will start a server and a cron job in the background.
+
+## Stack
+
+### backend / server
+
+The app uses a watered down version of MVC
+
+- We use `mongodb` and [atlas](https://www.mongodb.com/atlas) as our database; [`./models`](./models)
+  - [`./models/NewsModel.js`](./models/NewsModel.js) the atlas cluster has a `newsdb` DB with `coinPrices`, `news` as two collections
+  - [`./models/UserModel.js`](./models/UserModel.js) the atlas cluster has a `users` DB with a `users` collection to store user email
+- We use builtin `http` module to handle server or any other requests [`./app/server.js`](./app/server.js)
+- We use `Atlas API` to verify emails, the key is stored in `.env`; [`./app/EmailValidator.js`](./app/EmailValidator.js)
+- `nodemailer` is used to send mails via an outlook account; [`./app/Mailer.js`](./app/Mailer.js)
+- We use `cheerio` to scrape data from different sites; [`./app/NewsAggregator.js`](./app/NewsAggregator.js)
+- We run a `node-cron` job that updates our news database, and sends a mail to all subscribers at 7:00 IST; [`./app/BulkMailer.js`](./app/BulkMailer.js)
+
+All the "config" is located at [`./app/Constants.js`](./app/Constants.js)
+
+### frontend
+
+The app uses vanilla JavaScript and a simple [Notifier API](./public/notifer.js)
 
 ## API
 
@@ -27,6 +57,7 @@ example response:
 - 500 `internal-err`: in this context, it may mean that email validation via [abstract API](https://www.abstractapi.com/) failed
 
 ## log
+
 - [x] Basic email validation
   - Implemented email regex syntax check
   - Connect with [abstract API](https://www.abstractapi.com/) to ensure we don't get fake emails
@@ -44,6 +75,6 @@ example response:
   - Added Coindesk, theDefiant as sources for news; Add currency rates;
   - ~~[TODO] Figure out a way to systematically add these to our database~~
 - [x] Send newsletters every morning with the updated DB of news
-  - Setup a email template [./views/emailTemplate.ejs](./views/emailTemplate.ejs)
+  - Setup a email template [./views/mailTemplate.ejs](./views/mailTemplate.ejs)
   - Setup a cron scheduler
   - implement a welcome page 
