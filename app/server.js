@@ -58,7 +58,7 @@ async function sendWelcomeEmail(email) {
   await db.init()
   const news = await db.getNews();
   const prices = await db.getPrices();
-  const html = await ejs.renderFile("./views/mailTemplate.ejs", {data: data, prices: prices, greeting: "Welcome to cybernated!", welcome: true});
+  const html = await ejs.renderFile("./views/mailTemplate.ejs", {news: news, prices: prices, greeting: "Welcome to cybernated!", welcome: true});
   sendMail(email, "Welcome to cybernated!", html);
   await db.close();
 }

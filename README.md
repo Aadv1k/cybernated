@@ -21,6 +21,7 @@ The app uses a watered down version of the [MVC](https://www.tutorialspoint.com/
   - [`./models/UserModel.js`](./models/UserModel.js) the atlas cluster has a `users` DB with a `users` collection to store user email
 - We use builtin `http` module to handle server or any other requests [`./app/server.js`](./app/server.js)
 - We use `Atlas API` to verify emails, the key is stored in `.env`; [`./app/EmailValidator.js`](./app/EmailValidator.js)
+**NOTE: Atlas API validation is disabled in development mode, this is done to prevent the developer from exausting their API Calls**
 - `nodemailer` is used to send mails via an outlook account; [`./app/Mailer.js`](./app/Mailer.js)
 - We use `cheerio` to scrape data from different sites; [`./app/NewsAggregator.js`](./app/NewsAggregator.js)
 - We run a `node-cron` job that updates our news database, and sends a mail to all subscribers at 7:00 IST; [`./app/BulkMailer.js`](./app/BulkMailer.js)
