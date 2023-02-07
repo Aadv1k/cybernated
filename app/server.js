@@ -110,7 +110,7 @@ async function handleRegister(reqURL, res) {
   }
   await db.pushUser(regEmail);
   res.writeHead(200, { "Content-type": MIME.json });
-  res.write(JSON.stringify({code: "email-registered", message: "the email was registered successfully", status: 200}));
+  res.write(JSON.stringify({code: "email-registered", message: "SUCCESS! check your inbox", status: 200}));
   await sendWelcomeEmail(regEmail);
   await db.close();
 }
