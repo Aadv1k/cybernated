@@ -8,7 +8,7 @@ const NewsModel = require("../models/NewsModel.js")
 //function getCurrencyExchangeRates() { const url = "https://production.api.coindesk.com/v2/exchange-rates" }
 
 function getCoinPrices() {
-  const url = "https://ticker-api.cointelegraph.com/rates/";
+  const url = "https://ticker-api.cointelegraph.com/rates/?full=true";
   let data = "";
 
   return new Promise((resolve, reject) => {
@@ -18,7 +18,12 @@ function getCoinPrices() {
         let parsed = JSON.parse(data);
         let dat = []        
         for (const elem in parsed.data) {
-          dat.push({ coin: elem, price: parsed.data[elem].USD[0], up: parsed.data[elem].USD[1] > 0 })
+          dat.push({ 
+            coin: elem,
+            price: parsed.data[elem].USD.price,
+            change24h: parsed.data[elem].USD.change24h,
+            up: parsed.data[elem].USD.change24h > 0 
+          })
         }
         resolve(dat);
       });
@@ -133,4 +138,5 @@ async function getNewsData() {
   })
 }
 
-module.exports = {getNewsData};
+
+module.exports = {getNewsData, getCoinPrices};

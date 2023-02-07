@@ -57,7 +57,7 @@ async function sendWelcomeEmail(email) {
   const db = new NewsModel();
   await db.init()
   const data = await db.getNews();
-  const html = await ejs.renderFile("./views/welcomeMailTemplate.ejs", {data: data});
+  const html = await ejs.renderFile("./views/mailTemplate.ejs", {data: data, greeting: "Welcome to cybernated!", welcome: true});
   sendMail(email, "Welcome to cybernated!", html);
   await db.close();
 }

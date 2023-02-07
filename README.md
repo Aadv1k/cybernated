@@ -46,3 +46,4 @@ example response:
 - [x] Send newsletters every morning with the updated DB of news
   - Setup a email template [./views/emailTemplate.ejs](./views/emailTemplate.ejs)
   - Setup a cron scheduler
+  - implement a welcome page 

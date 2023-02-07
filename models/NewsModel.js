@@ -13,6 +13,7 @@ class NewsModel {
   async init() {
     await this.client.connect();
     this.db = this.client.db("Newsdb");
+
     this.prices = this.db.collection("coinPrices");
     this.news = this.db.collection("news");
   }
@@ -29,12 +30,21 @@ class NewsModel {
     await this.news.deleteMany({});
   }
 
+  async clearPricesDB() {
+    await this.prices.deleteMany({});
+  }
+
   async pushPrices(data) {
     await this.prices.insertMany(data)
   }
 
   async getNews() {
     const data = await this.news.find({}).toArray();
+    return data;
+  }
+
+  async getPrices() {
+    const data = await this.prices.find({}).toArray();
     return data;
   }
 

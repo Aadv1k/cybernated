@@ -24,7 +24,6 @@ h1,h2,h3,h4 {
 
 .hero__title {
   font-size: 1.5rem;
-  max-width: 25ch;
   margin: 0 auto;
 }
 
@@ -38,15 +37,57 @@ ul li {
 }
 
 
+.prices {
+  display: flex;
+  list-style: none;
+}
+
+.prices li {
+  display: flex;
+  background-color: #d1d5db;
+  color: black;
+  text-align: center;
+  border-radius: 5px;
+  flex-direction: column;
+  padding: .2rem;
+  width: 20%;
+  max-width: 100px;
+}
+
+.prices__coin {
+  font-weight: bold
+}
+
+span.prices__status--down {
+  background: #ef4444;
+  color: white;
+  font-weight: bold;
+  border-radius: 3px;
+  padding: .2rem;
+}
+
+span.prices__status--up {
+  background: #22c55e;
+  color: white;
+  font-weight: bold;
+  border-radius: 3px;
+  padding: .2rem;
+}
+
 span.news__source {
   color: #FB2576;
   text-transform: uppercase;
 }
 
-.news__link {
+a.news__link {
   color: #0002A1;
   text-decoration: none;
   line-height: 1.5;
+}
+
+
+.info-block {
+  margin: 1.5rem 0;
 }
   </style>
 </head>
@@ -55,8 +96,28 @@ span.news__source {
     <h1 class="hero__title"><%= greeting %></h1>
   </section>
   <section class="content">
+    <% if (welcome) {%>
+      <p class="info-block"> You will get a daily mail similar to this at <b>7:00 IST</b> Here is today's feed:</p>
+    <% }%>
+    <ul class="prices">
+      <% for (const dat of prices) {%>
+      <li>
+        <span class="prices__coin"><%= dat.coin %></span>
+        <span class="prices__price">$<%= dat.price %></span>
+        <% if (dat.change24h > 0) { %>
+          <span class="prices__status--up">
+            <%= dat.change24h %>
+          </span>
+        <% } else { %>
+          <span class="prices__status--down">
+            <%= dat.change24h %>
+          </span>
+        <% }%>
+      </li>
+      <% } %>
+    </ul>
     <ul class="news">
-      <% for (const dat of data) {%>
+      <% for (const dat of news) {%>
       <li>
         <span class="news__source">[<%= dat.source %>]</span>
         <a class="news__link" href="<%=dat.url%>"><%=dat.title%></a>
