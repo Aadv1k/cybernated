@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <style>
 * {
   margin: 0;
@@ -28,65 +29,69 @@ h1,h2,h3,h4 {
 }
 
 .content {
-  margin: .5rem 0;
   padding: 0 1.5rem;
 }
 
-ul li {
-  margin: 0 .5rem;
-}
-
-
 .prices {
+  margin: .8rem 0;
   display: flex;
-  list-style: none;
-}
-
-.prices li {
+  overflow: scroll;
   background-color: #d1d5db;
-  color: black;
-  text-align: center;
-  border-radius: 5px;
-  padding: .2rem;
-  width: 20%;
-  max-width: 100px;
+  padding: .8rem .5rem;
 }
 
-.prices li > * {
-  display: block;
+.prices > div {
+  color: black;
+  display: flex;
+  column-gap: .5rem;
+  margin: .2rem;
+  padding: .2rem;
+}
+
+
+.prices li > .prices__price {
+  display: inline;
 }
 
 .prices__coin {
   font-weight: bold
 }
 
-span.prices__status--down {
+div.down {
   background: #ef4444;
-  color: white;
-  font-weight: bold;
-  border-radius: 3px;
-  padding: .2rem;
 }
 
-span.prices__status--up {
+div.up {
   background: #22c55e;
-  color: white;
-  font-weight: bold;
-  border-radius: 3px;
-  padding: .2rem;
 }
 
-span.news__source {
-  color: #FB2576;
+.news {
+  max-width: 800px;
+}
+
+.news__title {
+  width: 100%;
+  background-color: #FB2576;  
   text-transform: uppercase;
+  font-weight: bold;
+  display: block;
+  color: white;
+  padding: .1rem;
+  border-radius: 3px;
 }
 
-a.news__link {
-  color: #0002A1;
-  text-decoration: none;
+.news > ul  {
+  padding-left: 1rem;
+}
+
+.news > ul > li {
   line-height: 1.5;
+  margin: .8rem 0;
 }
 
+.news > ul > li a {
+  color:#332FD0;
+}
 
 .info-block {
   margin: 1.5rem 0;
@@ -101,31 +106,51 @@ a.news__link {
     <% if (welcome) {%>
       <p class="info-block"> You will get a daily mail similar to this at <b>7:00 IST</b> Here is today's feed:</p>
     <% }%>
-    <ul class="prices">
+    <div class="prices">
       <% for (const dat of prices) {%>
-      <li>
+      <div class="<%= dat.change24h > 0 ? 'up' : 'down' %>">
         <span class="prices__coin"><%= dat.coin %></span>
         <span class="prices__price">$<%= dat.price %></span>
-        <% if (dat.change24h > 0) { %>
-          <span class="prices__status--up">
-            <%= dat.change24h %>
-          </span>
-        <% } else { %>
-          <span class="prices__status--down">
-            <%= dat.change24h %>
-          </span>
-        <% }%>
-      </li>
+      </div>
       <% } %>
-    </ul>
-    <ul class="news">
-      <% for (const dat of news) {%>
-      <li>
-        <span class="news__source">[<%= dat.source %>]</span>
-        <a class="news__link" href="<%=dat.url%>"><%=dat.title%></a>
-      </li>
-      <% } %>
-    </ul>
+    </div>
+
+    <div class="news">
+      <span class="news__title">Coindesk</span>
+      <ul class="news__coindesk">
+        <% for (const dat of news) {%>
+        <% if (dat.source.toLowerCase() === "coindesk") {%>
+            <li>
+              <a class="news__link" target="_blank" href="<%=dat.url%>"><%=dat.title%></a>
+            </li>
+          <% } %>
+        <% } %>
+      </ul>
+
+      <span class="news__title">TheDefiant</span>
+      <ul class="news__thedefiant">
+        <% for (const dat of news) {%>
+        <% if (dat.source.toLowerCase() === "thedefiant") {%>
+            <li>
+              <a class="news__link" target="_blank" href="<%=dat.url%>"><%=dat.title%></a>
+            </li>
+          <% } %>
+        <% } %>
+      </ul>
+
+      <span class="news__title">cointelegraph</span>
+      <ul class="news__cointelegraph">
+        <% for (const dat of news) {%>
+        <% if (dat.source.toLowerCase() === "cointelegraph") {%>
+            <li>
+              <a class="news__link" target="_blank" href="<%=dat.url%>"><%=dat.title%></a>
+            </li>
+          <% } %>
+        <% } %>
+      </ul>
+
+
+    </div>
   </section>
 </body>
 </html>
