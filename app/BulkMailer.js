@@ -44,7 +44,6 @@ async function mailAndPush() {
   let day = date.getDate();
   const today = "dd/mm".replace('mm', month < 10 ? `0${month}` : month).replace('dd', day < 10 ? `0${day}` : day);
   const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
-
   console.log("[INFO] Sending mail")
   emails.forEach(async (mail) => {
     await delay(3000)
@@ -61,7 +60,7 @@ async function mailAndPush() {
 }
 
 
-cron.schedule("02 10 * * *", async () => {
+cron.schedule(CRON_CMD, async () => {
   console.log("[INFO] Cron job started")
   await pushDataToDb();
   await mailAndPush();
