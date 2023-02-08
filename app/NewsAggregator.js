@@ -119,7 +119,9 @@ async function scrapeTheDefiant() {
                 res.on("end", () => {
                   let post$ = cheerio.load(postHtml);
                   let title = post$("article > h1").text();
+
                   if (title.toLowerCase().includes("sponsored")) resolve();
+
                   let imgURL = post$(
                     "article.relative.mx-auto.mb-12.w-full.max-w-3xl > div.my-10 > img"
                   ).attr("src");
@@ -175,7 +177,8 @@ async function scrapeCoinTelegraph() {
 
           requests.push(
             new Promise(async (resolve, _) => {
-              requestCloudflare.get(postURL, (_err, _res, body) => {
+              requestCloudflare.get(postURL, (_err, res, body) => {
+                if (res.statusCode != 200) resolve();
                 const $post = cheerio.load(body);
                 let title = $post("h1").text();
                 let imgURL = $post(
@@ -198,9 +201,10 @@ async function scrapeCoinTelegraph() {
             })
           );
         });
+
         Promise.all(requests)
           .then((data) => {
-            resolve(data);
+            resolve(data.filter(e => e));
           })
           .catch((err) => {
             reject(err);
@@ -252,7 +256,7 @@ async function getNewsData() {
       ...data2.slice(0, 8),
       ...data3.slice(0, 8),
       ...data4.slice(0, 8),
-    ]);
+    ].filter(e => e));
   });
 }
 
