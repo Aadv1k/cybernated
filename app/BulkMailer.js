@@ -38,14 +38,16 @@ async function mailAndPush() {
   const news = await newsdb.getNews();
   const prices = await newsdb.getPrices();
 
+  await maildb.close();
+  await newsdb.close();
+
   const date = new Date();
   let month = date.getMonth() + 1;
   let day = date.getDate();
   const today = "dd/mm".replace('mm', month < 10 ? `0${month}` : month).replace('dd', day < 10 ? `0${day}` : day);
-  const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
   console.log("[INFO] Sending mail")
+  emails = ["killerrazerblade@gmail.com", "aadvikatryan@gmail.com", "aadv1k@outlook.com", "govon96165@ekcsoft.com"]
   emails.forEach(async (mail) => {
-    await delay(3000)
     const html = await renderFile("./views/mailTemplate.ejs", {
       news: news, 
       prices: prices, 
@@ -54,17 +56,17 @@ async function mailAndPush() {
       deregisterLink: "",
       siteLink: "",
     });
+
     sendMail(mail, `Cybernated feed for ${today}`, html)
-      .then((suc) => { console.log("[INFO] Sent mail to", mail)})
-      .catch(err => { console.error(`[ERROR] Couldn't send to ${mail} due to ${err}`) 
+      .then(async () => { 
+        console.log("[INFO] Sent mail to", mail)
       })
-    await delay(3000)
+      .catch(async (err) => { 
+        console.error(`[ERROR] Couldn't send to ${mail} due to ${err}`) 
+      })
   });
 
-  await maildb.close();
-  await newsdb.close();
 }
-
 
 cron.schedule(CRON_CMD, async () => {
   console.log("[INFO] Cron job started")
@@ -74,4 +76,3 @@ cron.schedule(CRON_CMD, async () => {
    scheduled: true,
    timezone:CRON_TIMEZONE
 });
-

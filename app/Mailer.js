@@ -2,6 +2,8 @@ const nodemailer = require("nodemailer");
 const {MAIL_ADDR, MAIL_PWD} = require("./Constants");
 
 const transporter = nodemailer.createTransport({
+  maxConnections: 2,
+  pool: true,
   service: "hotmail",
   auth: {
     user: MAIL_ADDR,
