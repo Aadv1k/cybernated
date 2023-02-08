@@ -25,8 +25,7 @@
   </section>
 
   <section class="content">
-    <h1 class="content__title">Latest feed</h1>
-    <div class="news">
+    <!-- TODO: implement this
       <span class="news__title">Coindesk</span>
       <ul class="news__coindesk">
         <% for (const dat of news) {%>
@@ -37,42 +36,55 @@
           <% } %>
         <% } %>
       </ul>
+      -->
 
-      <span class="news__title">TheBlock</span>
-      <ul class="news__theblock">
-        <% for (const dat of news) {%>
-        <% if (dat.source.toLowerCase() === "theblock") {%>
-            <li>
-              <a class="news__link" target="_blank" href="<%=dat.url%>"><%=dat.title%></a>
+      <h2 class="news__title">Latest from TheBlock</h2>
+        <ul class="news-feed">
+          <% for (const dat of news) {%>
+          <% if (dat.source.toLowerCase() === "theblock") {%>
+            <li class="feed__itm">
+              <div class="feed__img">
+                <img src="<%=dat.img%>" alt="<%=dat.title%>">
+              </div>
+              <a class="feed__title" target="_blank" href="<%=dat.url%>"><%=dat.title%></a>
+              <a class="feed__more" href="<%= dat.url %>" target="_blank">read more</a>
             </li>
+            <% } %>
           <% } %>
-        <% } %>
-      </ul>
+        </ul>
 
-      <span class="news__title">TheDefiant</span>
-      <ul class="news__thedefiant">
-        <% for (const dat of news) {%>
-        <% if (dat.source.toLowerCase() === "thedefiant") {%>
-            <li>
-              <a class="news__link" target="_blank" href="<%=dat.url%>"><%=dat.title%></a>
+      <h2 class="news__title">Latest from Cointelegraph</h2>
+        <ul class="news-feed">
+          <% for (const dat of news) {%>
+          <% if (dat.source.toLowerCase() === "cointelegraph") {%>
+            <li class="feed__itm">
+              <div class="feed__img">
+                <img src="<%=dat.img%>" alt="<%=dat.title%>">
+              </div>
+              <a class="feed__title" target="_blank" href="<%=dat.url%>"><%=dat.title%></a>
+              <a class="feed__more" href="<%= dat.url %>" target="_blank">read more</a>
             </li>
+            <% } %>
           <% } %>
-        <% } %>
-      </ul>
+        </ul>
 
-      <span class="news__title">cointelegraph</span>
-      <ul class="news__cointelegraph">
-        <% for (const dat of news) {%>
-        <% if (dat.source.toLowerCase() === "cointelegraph") {%>
-            <li>
-              <a class="news__link" target="_blank" href="<%=dat.url%>"><%=dat.title%></a>
+      <h2 class="news__title">Latest from TheDefiant</h2>
+        <ul class="news-feed">
+          <% for (const dat of news) {%>
+          <% if (dat.source.toLowerCase() === "thedefiant") {%>
+            <li class="feed__itm">
+              <div class="feed__img">
+                <img src="<%=dat.img%>" alt="<%=dat.title%>">
+              </div>
+              <a class="feed__title" target="_blank" href="<%=dat.url%>"><%=dat.title%></a>
+              <a class="feed__more" href="<%= dat.url %>" target="_blank">read more</a>
             </li>
+            <% } %>
           <% } %>
-        <% } %>
-      </ul>
+        </ul>
+      </div>
 
 
-    </div>
   </section>
 </body>
 </html>
