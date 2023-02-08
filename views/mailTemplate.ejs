@@ -96,6 +96,19 @@ div.up {
 .info-block {
   margin: 1.5rem 0;
 }
+
+footer {
+  padding: .8rem .5rem;
+  background-color: #d1d5db;
+  margin-top: .5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.footer__link {
+  font-weight: bold;
+  margin-right: .5rem;
+}
   </style>
 </head>
 <body>
@@ -161,5 +174,16 @@ div.up {
       </ul>
     </div>
   </section>
+    <% if (welcome) {%>
+    <footer>
+      <a href="<%= deregisterLink %>" class="footer__link">Unsubscribe</a>
+      <a href="https://github.com/aadv1k/cybernated" class="footer__link">
+        GitHub
+      </a>
+      <a href="<%= siteLink %>" class="footer__link">
+        Cybernated
+      </a>
+    </footer>
+    <% }  %>
 </body>
 </html>

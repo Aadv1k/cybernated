@@ -7,7 +7,6 @@ const NewsModel = require("../models/NewsModel");
 const UserModel = require("../models/UserModel");
 const cron = require("node-cron");
 
-
 async function pushDataToDb() {
   const db = new NewsModel();
   await db.init();
@@ -47,7 +46,14 @@ async function mailAndPush() {
   console.log("[INFO] Sending mail")
   emails.forEach(async (mail) => {
     await delay(3000)
-    const html = await renderFile("./views/mailTemplate.ejs", {news: news, prices: prices, greeting: "Good morning! " + mail.split('@')[0], welcome: false});
+    const html = await renderFile("./views/mailTemplate.ejs", {
+      news: news, 
+      prices: prices, 
+      greeting: "Good morning! " + mail.split('@')[0], 
+      welcome: false,
+      deregisterLink: "",
+      siteLink: "",
+    });
     sendMail(mail, `Cybernated feed for ${today}`, html)
       .then((suc) => { console.log("[INFO] Sent mail to", mail)})
       .catch(err => { console.error(`[ERROR] Couldn't send to ${mail} due to ${err}`) 

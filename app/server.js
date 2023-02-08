@@ -53,18 +53,27 @@ function handleFilepath(url, res) {
   }
 }
 
-async function sendWelcomeEmail(email) {
+async function sendWelcomeEmail(res, email, url) {
   const db = new NewsModel();
   await db.init()
   const news = await db.getNews();
   const prices = await db.getPrices();
-  const html = await ejs.renderFile("./views/mailTemplate.ejs", {news: news, prices: prices, greeting: "Welcome to cybernated!", welcome: true});
+  const baseURL = url.slice(0, url.lastIndexOf('/'));
+
+  const html = await ejs.renderFile("./views/mailTemplate.ejs", {
+    news: news, 
+    prices: prices, 
+    greeting: "Welcome to cybernated!", 
+    welcome: true,
+    deregisterLink: `${baseURL}/deregister?email=${email}`,
+    siteLink: baseURL
+  });
   sendMail(email, "Welcome to cybernated!", html);
   await db.close();
 }
 
 async function handleDeregister(reqURL, res) {
-  let registerURL = new URL("https://example.com/" + reqURL);
+  let registerURL = new URL(reqURL);
   let registerParams = registerURL.searchParams;
   let regEmail = registerParams.get("email");
   const db = new UserModel();
@@ -87,7 +96,7 @@ async function handleDeregister(reqURL, res) {
 }
 
 async function handleRegister(reqURL, res) {
-  let registerURL = new URL("https://example.com/" + reqURL);
+  let registerURL = new URL(reqURL);
   let registerParams = registerURL.searchParams;
   let regEmail = registerParams.get("email");
 
@@ -138,19 +147,20 @@ async function handleRegister(reqURL, res) {
   await db.pushUser(regEmail);
   res.writeHead(200, { "Content-type": MIME.json });
   sendJsonErr(res, STATUS.emailRegistered);
-  await sendWelcomeEmail(regEmail);
+  await sendWelcomeEmail(res, regEmail, reqURL);
   await db.close();
 }
 
 const server = http.createServer(async (req, res) => {
-  const url = req.url;
+  const uri = req.url;
+  const url = `https://${req.headers.host}${uri}`
   const ext = req.url.split('.').pop();
 
-  if (url === "/" || url === "/index") {
+  if (uri === "/" || uri === "/index") {
     await handleIndex(res);
-  } else if (url.startsWith("/register")) {
+  } else if (uri.startsWith("/register")) {
     await handleRegister(url, res);
-  } else if (url.startsWith("/deregister")) {
+  } else if (uri.startsWith("/deregister")) {
     await handleDeregister(url, res)
   } else if (ext) {
     handleFilepath(url, res);
