@@ -37,21 +37,19 @@ async function mailAndPush() {
   const news = await newsdb.getNews();
   const prices = await newsdb.getPrices();
 
-
-  console.log(news);
   const date = new Date();
   let month = date.getMonth() + 1;
   let day = date.getDate();
   const today = "dd/mm".replace('mm', month < 10 ? `0${month}` : month).replace('dd', day < 10 ? `0${day}` : day);
 
-  ["killerrazerblade@gmail.com"].forEach(async (mail) => {
+  emails.forEach(async (mail) => {
     const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
     const html = await renderFile("./views/mailTemplate.ejs", {news: news, prices: prices, greeting: "Good morning! " + mail.split('@')[0], welcome: false});
     sendMail(mail, `Cybernated feed for ${today}`, html)
       .then((suc) => { console.log("[INFO] Sent mail to", mail)})
       .catch(err => { console.error(`[ERROR] Couldn't send to ${mail} due to ${err}`) 
       })
-    await delay(3000)
+    await delay(4000)
   });
 
   await maildb.close();
