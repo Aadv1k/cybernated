@@ -45,8 +45,17 @@ async function handlePost(url, res) {
   })
 }
 
+function getEtag() {
+  const file = readFileSync("./meta.json");
+  return JSON.parse(file).hash;
+}
+
 async function handleIndex(res) {
-  res.writeHead(200, { "Content-type": MIME.html });
+  res.writeHead(200, { 
+    "Content-type": MIME.html,
+    "Cache-control": "max-age=86400",
+    "Etag": getEtag(),
+  });
   const db = new NewsModel();
   await db.init();
   const news = await db.getNews();
@@ -187,7 +196,12 @@ const server = http.createServer(async (req, res) => {
   const ext = req.url.split('.').pop();
 
   if (uri === "/" || uri === "/index") {
-    await handleIndex(res);
+    if (req.headers["if-none-match"] === getEtag()) {
+      res.statusCode = 304;
+      res.end();
+    } else {
+      await handleIndex(res);
+    }
   } else if (uri.startsWith("/register")) {
     await handleRegister(url, res);
   } else if (uri.startsWith("/deregister")) {

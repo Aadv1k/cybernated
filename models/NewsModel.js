@@ -10,6 +10,7 @@ class NewsModel {
     this.db = null;
   }
 
+
   async init() {
     await this.client.connect();
     this.db = this.client.db("Newsdb");

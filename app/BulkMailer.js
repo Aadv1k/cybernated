@@ -6,6 +6,14 @@ const { CRON_TIMEZONE, CRON_CMD } = require("./Constants");
 const NewsModel = require("../models/NewsModel");
 const UserModel = require("../models/UserModel");
 const cron = require("node-cron");
+const {createHash} = require("crypto");
+const fs = require("fs");
+
+function genEtag(data) {
+  fs.writeFileSync("./meta.json", JSON.stringify({
+    hash: createHash('md5').update(data).digest('hex')
+  }));
+}
 
 async function pushDataToDb() {
   const db = new NewsModel();
@@ -13,13 +21,12 @@ async function pushDataToDb() {
 
   const news = await getNewsData();
   const prices = await getCoinPrices();
-
+  genEtag(JSON.stringify(news));
   await db.clearNewsDB();
   await db.clearPricesDB();
 
   await db.pushNews(news);
   await db.pushPrices(prices.slice(0, 10));
-
   console.log("[INFO] updated DB with latest feed")
 
   await db.close();
