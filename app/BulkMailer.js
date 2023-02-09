@@ -46,7 +46,7 @@ async function mailAndPush() {
   let day = date.getDate();
   const today = "dd/mm".replace('mm', month < 10 ? `0${month}` : month).replace('dd', day < 10 ? `0${day}` : day);
   console.log("[INFO] Sending mail")
-  emails = ["killerrazerblade@gmail.com", "aadvikatryan@gmail.com", "aadv1k@outlook.com", "govon96165@ekcsoft.com"]
+
   emails.forEach(async (mail) => {
     const html = await renderFile("./views/mailTemplate.ejs", {
       news: news, 
