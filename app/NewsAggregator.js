@@ -69,10 +69,9 @@ function scrapeTheBlock() {
                     content.push($(elem).text());
                   });
                 resolve({
-                  title: title,
+                  title,
                   img: imgURL,
-                  content: content.join(''),
-                  paras: content,
+                  content,
                   url: postUrl,
                   source: "theblock",
                 });
@@ -133,8 +132,7 @@ async function scrapeTheDefiant() {
                   resolve({
                     title,
                     img: siteURL + imgURL,
-                    content: content.join(''),
-                    paras: content,
+                    content,
                     url: postURL,
                     source: "thedefiant",
                   });
@@ -195,8 +193,7 @@ async function scrapeCoinTelegraph() {
                 resolve({
                   title,
                   img: imgURL,
-                  content: content.join(''),
-                  paras: content,
+                  content,
                   url: postURL,
                   source: "cointelegraph",
                 });
@@ -227,7 +224,6 @@ function scrapeCoindesk() {
   });
   let data = "";
   const cookedURL = `${baseURL}?${uri}`;
-
   return new Promise((resolve, reject) => {
     https.get(cookedURL, (res) => {
       res.on("data", (d) => (data += d));

@@ -156,7 +156,7 @@ footer {
               <div class="feed__img">
                 <img src="<%=dat.img%>" alt="<%=dat.title%>">
               </div>
-              <p class="feed__content"><%=dat.content.split('.').slice(0, 7).join('.')%></p>
+              <p class="feed__content"><%=dat.content.slice(0, 5).join('')%></p>
               <a class="feed__more" href="<%= dat.url %>" target="_blank">read more</a>
             </li>
             <% } %>
@@ -172,7 +172,7 @@ footer {
               <div class="feed__img">
                 <img src="<%=dat.img%>" alt="<%=dat.title%>">
               </div>
-              <p class="feed__content"><%=dat.content.split('.').slice(0, 7).join('.')%></p>
+              <p class="feed__content"><%=dat.content.slice(0, 5).join('')%></p>
               <a class="feed__more" href="<%= dat.url %>" target="_blank">read more</a>
             </li>
             <% } %>
@@ -188,7 +188,7 @@ footer {
               <div class="feed__img">
                 <img src="<%=dat.img%>" alt="<%=dat.title%>">
               </div>
-              <p class="feed__content"><%=dat.content.split('.').slice(0, 7).join('.')%></p>
+              <p class="feed__content"><%=dat.content.slice(0, 5).join('')%></p>
               <a class="feed__more" href="<%= dat.url %>" target="_blank">read more</a>
             </li>
             <% } %>
