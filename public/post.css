@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;700&family=Syne:wght@700;800&display=swap');
+
+:root  {
+  --purple: #3F0071;
+  --blue-1: #332FD0;
+  --blue-2: #0002A1;
+  --rose: #fbd8dc;
+  --pink: #FB2576;
+  --white: #ffffff;
+}
+
+* {
+  margin: 0;
+  padding: 0; 
+  font-family: 'Inter', sans-serif;
+  box-sizing: border-box;
+}
+
+
+nav {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-block: .5rem;
+}
+
+h1,h2,h3,h4,span.brand {
+  font-family: "Syne", Tahoma, sans-serif;
+}
+
+.nav__brand {
+  color: var(--blue-2);
+  text-decoration: none;
+}
+
+.post {
+  width: 90%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.post >* {
+  margin-bottom: 1rem;
+}
+
+.post__img img {
+  width: 100%;
+}
+
+.post__content p {
+  line-height: 1.5;
+  margin-block: .5rem;
+}
+
+.post__source {
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--blue-1);
+  display: block;
+}

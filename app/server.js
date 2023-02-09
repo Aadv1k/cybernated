@@ -15,6 +15,36 @@ function sendJsonErr(res, errObj) {
   res.write(JSON.stringify({ code: errObj.code, message: errObj.msg, status: errObj.status}));
 }
 
+async function handlePost(url, res) {
+  const newsdb = new NewsModel();
+  await newsdb.init();
+
+  const [pSource, pLink] = url.split('/').slice(-2);
+  if (!["thedefiant", "cointelegraph", "theblock"].includes(pSource)) {
+    res.writeHead(302, {"Location": "/"});
+    return;
+  }
+
+  const news = await newsdb.getNews();
+  const target = news.find(e => e.url.split('/').pop() === pLink);
+  if (!target) {
+
+    if (existsSync(`./public/${pLink}`)) {
+      handleFilepath(url, res);
+      return;
+    };
+
+    res.writeHead(302, {"Location": "/"});
+    return;
+  }
+
+  res.writeHead(200, { "Content-type": MIME.html });
+  ejs.renderFile("./views/post.ejs", {post: target}, (err, htmlStr) => {
+    if (err) console.error(err);
+    res.write(htmlStr);
+  })
+}
+
 async function handleIndex(res) {
   res.writeHead(200, { "Content-type": MIME.html });
   const db = new NewsModel();
@@ -162,7 +192,9 @@ const server = http.createServer(async (req, res) => {
     await handleRegister(url, res);
   } else if (uri.startsWith("/deregister")) {
     await handleDeregister(url, res)
-  } else if (ext) {
+  } else if (uri.startsWith("/post")) {
+   await  handlePost(url, res);
+} else if (ext) {
     handleFilepath(url, res);
   } else {
     handle404(res);

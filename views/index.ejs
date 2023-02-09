@@ -47,8 +47,8 @@
                 <img src="<%=dat.img%>" alt="<%=dat.title%>">
               </div>
               <a class="
-                feed__title" target="_blank" href="<%=dat.url%>"><%=dat.title%></a>
-              <a class="feed__more" href="<%= dat.url %>" target="_blank">read more</a>
+                feed__title"  href="<%= '/post/' + dat.source + '/' + dat.url.split('/').pop() %>"><%=dat.title%></a>
+              <a class="feed__more" href="<%= '/post/' + dat.source + '/' + dat.url.split('/').pop() %>">read more</a>
             </li>
             <% } %>
           <% } %>
@@ -62,8 +62,9 @@
               <div class="feed__img">
                 <img src="<%=dat.img%>" alt="<%=dat.title%>">
               </div>
-              <a class="feed__title" target="_blank" href="<%=dat.url%>"><%=dat.title%></a>
-              <a class="feed__more" href="<%= dat.url %>" target="_blank">read more</a>
+              <a class="
+                feed__title"  href="<%= '/post/' + dat.source + '/' + dat.url.split('/').pop() %>"><%=dat.title%></a>
+              <a class="feed__more" href="<%= '/post/' + dat.source + '/' + dat.url.split('/').pop() %>">read more</a>
             </li>
             <% } %>
           <% } %>
@@ -77,8 +78,9 @@
               <div class="feed__img">
                 <img src="<%=dat.img%>" alt="<%=dat.title%>">
               </div>
-              <a class="feed__title" target="_blank" href="<%=dat.url%>"><%=dat.title%></a>
-              <a class="feed__more" href="<%= dat.url %>" target="_blank">read more</a>
+              <a class="
+                feed__title"  href="<%= '/post/' + dat.source + '/' + dat.url.split('/').pop() %>"><%=dat.title%></a>
+              <a class="feed__more" href="<%= '/post/' + dat.source + '/' + dat.url.split('/').pop() %>">read more</a>
             </li>
             <% } %>
           <% } %>

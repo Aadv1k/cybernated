@@ -53,7 +53,7 @@ function scrapeTheBlock() {
             new Promise(async (resolve, _) => {
               let title,
                 imgURL,
-                content = "";
+                content = [];
               requestCloudflare.get(postUrl, (_err, _res, body) => {
                 const $post = cheerio.load(body);
                 title = $post("h1").text();
@@ -66,12 +66,13 @@ function scrapeTheBlock() {
                 
                   .find("#articleContent > span:not(.copyright) > p")
                   .each((_idx, elem) => {
-                    content += $(elem).text();
+                    content.push($(elem).text());
                   });
                 resolve({
                   title: title,
                   img: imgURL,
-                  content: content,
+                  content: content.join(''),
+                  paras: content,
                   url: postUrl,
                   source: "theblock",
                 });
@@ -125,14 +126,15 @@ async function scrapeTheDefiant() {
                   let imgURL = post$(
                     "article.relative.mx-auto.mb-12.w-full.max-w-3xl > div.my-10 > img"
                   ).attr("src");
-                  let content = "";
+                  let content = [];
                   post$("article > .prose > p").each((_, e) => {
-                    content += $(e).text();
+                    content.push($(e).text());
                   });
                   resolve({
                     title,
                     img: siteURL + imgURL,
-                    content,
+                    content: content.join(''),
+                    paras: content,
                     url: postURL,
                     source: "thedefiant",
                   });
@@ -185,15 +187,16 @@ async function scrapeCoinTelegraph() {
                   "div.post-cover.post__block > div > div > picture > img"
                 ).attr("src");
 
-                let content = "";
+                let content = [];
                 $post("div.post__content-wrapper > div.post-content").children().each((_, e) => {
-                  content += $(e).text();
+                  content.push($(e).text());
                 });
 
                 resolve({
                   title,
                   img: imgURL,
-                  content,
+                  content: content.join(''),
+                  paras: content,
                   url: postURL,
                   source: "cointelegraph",
                 });
