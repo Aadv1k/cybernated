@@ -19,6 +19,7 @@ function sendMail(to, subject, html) {
       subject: subject,
       html: html,
     }, (err, info) => {
+      transporter.close();
       if (err) reject(err);
       resolve(info);
     })

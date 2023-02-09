@@ -30,20 +30,18 @@ h1,h2,h3,h4 {
 
 .content {
   padding: 0 1.5rem;
+  width: 99%;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-.prices {
-  margin: .8rem 0;
-  display: flex;
-  overflow: scroll;
-  background-color: #d1d5db;
-  padding: .8rem .5rem;
-}
 
-.prices > div {
+
+.prices > li {
   color: black;
+  width: 100%;
+  justify-content: space-between;
   display: flex;
-  column-gap: .5rem;
   margin: .2rem;
   padding: .2rem;
 }
@@ -57,45 +55,63 @@ h1,h2,h3,h4 {
   font-weight: bold
 }
 
-div.down {
-  background: #ef4444;
+li.down {
+  background: #f87171;
 }
 
-div.up {
-  background: #22c55e;
+li.up {
+  background: #4ade80;
 }
 
-.news {
-  max-width: 800px;
-}
 
 .news__title {
-  width: 100%;
-  background-color: #FB2576;  
-  text-transform: uppercase;
-  font-weight: bold;
+  color: #0002A1;
+  font-family: "Syne", Tahoma, sans-serif;
+  font-size: 2rem;
+  margin: 1rem auto;
   display: block;
-  color: white;
-  padding: .1rem;
+}
+
+.news-feed {
+  list-style: none;
+}
+
+.feed__itm {
+  border: 3px solid #fbd8dc;
+  margin: 1rem 0;
+  padding: 1rem;
   border-radius: 3px;
 }
 
-.news > ul  {
-  padding-left: 1rem;
+.feed__title {
+  color: black;
+  text-decoration: underline;
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
-.news > ul > li {
+.feed__content {
   line-height: 1.5;
-  margin: .8rem 0;
+  margin: 1rem 0;
 }
 
-.news > ul > li a {
-  color:#332FD0;
+.feed__img {
+  border-radius: 5px;
+max-width: 400px;
+margin: 1.5rem auto;
 }
 
-.info-block {
-  margin: 1.5rem 0;
+.feed__img img {
+  border-radius: 5px;
+  width: 100%;
 }
+
+.feed__more {
+  text-transform: uppercase;
+  color: #0002A1;
+  font-weight: bold;
+}
+
 
 footer {
   padding: .8rem .5rem;
@@ -119,59 +135,65 @@ footer {
     <% if (welcome) {%>
       <p class="info-block"> You will get a daily mail similar to this at <b>7:00 IST</b> Here is today's feed:</p>
     <% }%>
-    <div class="prices">
+
+    <ul class="prices">
       <% for (const dat of prices) {%>
-      <div class="<%= dat.change24h > 0 ? 'up' : 'down' %>">
+      <li class="<%= dat.change24h > 0 ? 'up' : 'down' %>">
         <span class="prices__coin"><%= dat.coin %></span>
         <span class="prices__price">$<%= dat.price %></span>
-      </div>
+      </li>
       <% } %>
-    </div>
+    </ul>
 
     <div class="news">
-      <span class="news__title">Coindesk</span>
-      <ul class="news__coindesk">
-        <% for (const dat of news) {%>
-        <% if (dat.source.toLowerCase() === "coindesk") {%>
-            <li>
-              <a class="news__link" target="_blank" href="<%=dat.url%>"><%=dat.title%></a>
-            </li>
-          <% } %>
-        <% } %>
-      </ul>
 
-      <span class="news__title">TheBlock</span>
-      <ul class="news__theblock">
-        <% for (const dat of news) {%>
-        <% if (dat.source.toLowerCase() === "theblock") {%>
-            <li>
-              <a class="news__link" target="_blank" href="<%=dat.url%>"><%=dat.title%></a>
+    <span class="news__title">Latest from TheDefiant</span>
+        <ul class="news-feed">
+          <% for (const dat of news) {%>
+          <% if (dat.source.toLowerCase() === "thedefiant") {%>
+            <li class="feed__itm">
+              <a class="feed__title" target="_blank" href="<%=dat.url%>"><%=dat.title%></a>
+              <div class="feed__img">
+                <img src="<%=dat.img%>" alt="<%=dat.title%>">
+              </div>
+              <p class="feed__content"><%=dat.content.split('.').slice(0, 7).join('.')%></p>
+              <a class="feed__more" href="<%= dat.url %>" target="_blank">read more</a>
             </li>
+            <% } %>
           <% } %>
-        <% } %>
-      </ul>
+        </ul>
 
-      <span class="news__title">TheDefiant</span>
-      <ul class="news__thedefiant">
-        <% for (const dat of news) {%>
-        <% if (dat.source.toLowerCase() === "thedefiant") {%>
-            <li>
-              <a class="news__link" target="_blank" href="<%=dat.url%>"><%=dat.title%></a>
+    <span class="news__title">Latest from CoinTelegraph</span>
+        <ul class="news-feed">
+          <% for (const dat of news) {%>
+          <% if (dat.source.toLowerCase() === "cointelegraph") {%>
+            <li class="feed__itm">
+              <a class="feed__title" target="_blank" href="<%=dat.url%>"><%=dat.title%></a>
+              <div class="feed__img">
+                <img src="<%=dat.img%>" alt="<%=dat.title%>">
+              </div>
+              <p class="feed__content"><%=dat.content.split('.').slice(0, 7).join('.')%></p>
+              <a class="feed__more" href="<%= dat.url %>" target="_blank">read more</a>
             </li>
+            <% } %>
           <% } %>
-        <% } %>
-      </ul>
+        </ul>
 
-      <span class="news__title">cointelegraph</span>
-      <ul class="news__cointelegraph">
-        <% for (const dat of news) {%>
-        <% if (dat.source.toLowerCase() === "cointelegraph") {%>
-            <li>
-              <a class="news__link" target="_blank" href="<%=dat.url%>"><%=dat.title%></a>
+    <span class="news__title">Latest from TheBlock</span>
+        <ul class="news-feed">
+          <% for (const dat of news) {%>
+          <% if (dat.source.toLowerCase() === "theblock") {%>
+            <li class="feed__itm">
+              <a class="feed__title" target="_blank" href="<%=dat.url%>"><%=dat.title%></a>
+              <div class="feed__img">
+                <img src="<%=dat.img%>" alt="<%=dat.title%>">
+              </div>
+              <p class="feed__content"><%=dat.content.split('.').slice(0, 7).join('.')%></p>
+              <a class="feed__more" href="<%= dat.url %>" target="_blank">read more</a>
             </li>
+            <% } %>
           <% } %>
-        <% } %>
-      </ul>
+        </ul>
     </div>
   </section>
     <% if (welcome) {%>

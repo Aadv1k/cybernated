@@ -63,9 +63,9 @@ function scrapeTheBlock() {
                   .find("img")
                   .attr("src");
                 $post("div#articleContent")
-                  .find("span")
-                  .children()
-                  .each((idx, elem) => {
+                
+                  .find("#articleContent > span:not(.copyright) > p")
+                  .each((_idx, elem) => {
                     content += $(elem).text();
                   });
                 resolve({
