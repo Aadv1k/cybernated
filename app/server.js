@@ -10,22 +10,24 @@ const { isEmailValid, isEmailReal } = require("./EmailValidator");
 const sendMail = require("./Mailer");
 const {STATUS, MIME, MODE} = require("./Constants");
 
+const NEWS_DB = new NewsModel();
+const USER_DB = new UserModel();
+
+
 function sendJsonErr(res, errObj) {
   res.writeHead(errObj.status, { "Content-type": MIME.json });
   res.write(JSON.stringify({ code: errObj.code, message: errObj.msg, status: errObj.status}));
 }
 
 async function handlePost(url, res) {
-  const newsdb = new NewsModel();
-  await newsdb.init();
-
+  await NEWS_DB.init();
   const [pSource, pLink] = url.split('/').slice(-2);
   if (!["thedefiant", "cointelegraph", "theblock"].includes(pSource)) {
     res.writeHead(302, {"Location": "/"});
     return;
   }
 
-  const news = await newsdb.getNews();
+  const news = await NEWS_DB.getNews();
   const target = news.find(e => e.url.split('/').pop() === pLink);
   if (!target) {
 
@@ -56,9 +58,8 @@ async function handleIndex(res) {
     "Cache-control": "max-age=86400",
     "Etag": getEtag(),
   });
-  const db = new NewsModel();
-  await db.init();
-  const news = await db.getNews();
+  await NEWS_DB.init();
+  const news = await NEWS_DB.getNews();
 
   ejs.renderFile("./views/index.ejs", {news: news}, (err, htmlStr) => {
     if (err) console.error(err);
@@ -92,11 +93,10 @@ function handleFilepath(url, res) {
   }
 }
 
-async function sendWelcomeEmail(res, email, url) {
-  const db = new NewsModel();
-  await db.init()
-  const news = await db.getNews();
-  const prices = await db.getPrices();
+async function sendWelcomeEmail(email, url) {
+  await NEWS_DB.init()
+  const news = await NEWS_DB.getNews();
+  const prices = await NEWS_DB.getPrices();
   const baseURL = url.slice(0, url.lastIndexOf('/'));
 
   const html = await ejs.renderFile("./views/mailTemplate.ejs", {
@@ -108,30 +108,27 @@ async function sendWelcomeEmail(res, email, url) {
     siteLink: baseURL
   });
   sendMail(email, "Welcome to cybernated!", html);
-  await db.close();
 }
 
 async function handleDeregister(reqURL, res) {
   let registerURL = new URL(reqURL);
   let registerParams = registerURL.searchParams;
   let regEmail = registerParams.get("email");
-  const db = new UserModel();
-  await db.init()
+  await USER_DB.init()
 
   if (!regEmail) {
     sendJsonErr(res, STATUS.emailInvalid);
     return;
   }
 
-  const emailExists = await db.userExists(regEmail);
+  const emailExists = await USER_DB.userExists(regEmail);
   if (!emailExists) {
     sendJsonErr(res, STATUS.invalidUserToDeregister);
     return;
   }
 
-  await db.rmUser(regEmail);
+  await USER_DB.rmUser(regEmail);
   sendJsonErr(res, STATUS.emailDeregistered);
-  await db.close();
 }
 
 async function handleRegister(reqURL, res) {
@@ -139,9 +136,8 @@ async function handleRegister(reqURL, res) {
   let registerParams = registerURL.searchParams;
   let regEmail = registerParams.get("email");
 
-  const db = new UserModel();
   try {
-    await db.init();
+    await USER_DB.init();
   } catch (err) {
       sendJsonErr(
         res,
@@ -154,7 +150,7 @@ async function handleRegister(reqURL, res) {
     return;
   }
 
-  const emailExists = await db.userExists(regEmail);
+  const emailExists = await USER_DB.userExists(regEmail);
   if (emailExists) {
     sendJsonErr(res, STATUS.emailExists)
     return;
@@ -183,11 +179,10 @@ async function handleRegister(reqURL, res) {
     }
   }
 
-  await db.pushUser(regEmail);
+  await USER_DB.pushUser(regEmail);
   res.writeHead(200, { "Content-type": MIME.json });
   sendJsonErr(res, STATUS.emailRegistered);
-  await sendWelcomeEmail(res, regEmail, reqURL);
-  await db.close();
+  await sendWelcomeEmail(regEmail, reqURL);
 }
 
 const server = http.createServer(async (req, res) => {
@@ -207,7 +202,7 @@ const server = http.createServer(async (req, res) => {
   } else if (uri.startsWith("/deregister")) {
     await handleDeregister(url, res)
   } else if (uri.startsWith("/post")) {
-   await  handlePost(url, res);
+   await handlePost(url, res);
 } else if (ext) {
     handleFilepath(url, res);
   } else {
