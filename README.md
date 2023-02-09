@@ -85,4 +85,8 @@ invalid-user-to-deregister
   - Setup a email template [./views/mailTemplate.ejs](./views/mailTemplate.ejs)
   - Setup a cron scheduler
   - implement a welcome page 
+- [x] Change the implementation of index to accommodate images and post content within the site
+- [x] CONCLUDE THE PROJECT
+  - optimised the database documents to have less fields
+  - implement caching in of the index
 
