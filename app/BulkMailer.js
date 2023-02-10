@@ -78,7 +78,8 @@ async function mailAndPush() {
 cron.schedule(CRON_CMD, async () => {
   console.log("[INFO] Cron job started")
   await pushDataToDb();
-  await mailAndPush();
+  // NOTE: EMAIL UNDER VERIFICATION
+  //await mailAndPush();
 }, {
    scheduled: true,
    timezone:CRON_TIMEZONE

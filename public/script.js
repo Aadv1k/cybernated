@@ -39,7 +39,7 @@ regForm.addEventListener("submit", async (e) => {
 
   hideLoader();
   if (res.ok) {
-    notifier.success("Success!", "check your inbox")
+    notifier.success("Success!", "your email was registered, check your inbox")
     return;
   };
 

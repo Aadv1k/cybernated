@@ -182,7 +182,7 @@ async function handleRegister(reqURL, res) {
   await USER_DB.pushUser(regEmail);
   res.writeHead(200, { "Content-type": MIME.json });
   sendJsonErr(res, STATUS.emailRegistered);
-  await sendWelcomeEmail(regEmail, reqURL);
+  //await sendWelcomeEmail(regEmail, reqURL);
 }
 
 const server = http.createServer(async (req, res) => {
