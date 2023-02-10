@@ -10,12 +10,12 @@
   "author": "Aadv1k <aadv1k@outlook.com>",
   "license": "MIT",
   "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
     "cheerio": "^1.0.0-rc.12",
     "dotenv": "^16.0.3",
     "ejs": "^3.1.8",
     "mongodb": "^5.0.0",
     "node-cron": "^3.0.2",
-    "nodemailer": "^6.9.1",
     "request-cloudflare": "^2.0.0"
   },
   "devDependencies": {

@@ -83,4 +83,3 @@ cron.schedule(CRON_CMD, async () => {
    scheduled: true,
    timezone:CRON_TIMEZONE
 });
-

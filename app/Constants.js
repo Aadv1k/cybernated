@@ -6,8 +6,8 @@ module.exports = {
   ABSTRACT_API_KEY: process.env.ABSTRACT_API_KEY,
   MONGO_ATLAS_PWD: process.env.MONGO_ATLAS_PWD,
   MONGO_ATLAS_USER: process.env.MONGO_ATLAS_USER,
-  MAIL_ADDR: process.env.MAIL_ADDR,
-  MAIL_PWD: process.env.MAIL_PWD,
+  MAIL_ADDR: "news.cybernated@outlook.com",
+  SENDGRID_API_KEY: process.env.SENDGRID_API_KEY,
 
   ABSTRACT_API_URL: "https://emailvalidation.abstractapi.com/v1/",
   EMAIL_REG: /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/,

@@ -1,28 +1,23 @@
-const nodemailer = require("nodemailer");
-const {MAIL_ADDR, MAIL_PWD} = require("./Constants");
+const {SENDGRID_API_KEY, MAIL_ADDR} = require("./Constants");
 
-const transporter = nodemailer.createTransport({
-  maxConnections: 2,
-  pool: true,
-  service: "hotmail",
-  auth: {
-    user: MAIL_ADDR,
-    pass: MAIL_PWD
-  },
-});
+const sgMail = require('@sendgrid/mail')
+
+sgMail.setApiKey(SENDGRID_API_KEY);
 
 function sendMail(to, subject, html) {
+  console.log(MAIL_ADDR);
+  const mail = {
+    to,
+    from: MAIL_ADDR,
+    subject,
+    html
+  }
+
   return new Promise((resolve, reject) => {
-    transporter.sendMail({
-      from: MAIL_ADDR,
-      to: to,
-      subject: subject,
-      html: html,
-    }, (err, info) => {
-      transporter.close();
-      if (err) reject(err);
-      resolve(info);
-    })
+    sgMail
+      .send(mail)
+      .then(() => resolve("email sent"))
+      .catch(err => reject(err));
   })
 }
 
