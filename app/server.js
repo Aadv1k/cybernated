@@ -107,7 +107,8 @@ async function sendWelcomeEmail(email, url) {
     deregisterLink: `${baseURL}/deregister?email=${email}`,
     siteLink: baseURL
   });
-  sendMail(email, "Welcome to cybernated!", html);
+  
+  await sendMail(email, "Welcome to cybernated!", html);
 }
 
 async function handleDeregister(reqURL, res) {
@@ -182,7 +183,7 @@ async function handleRegister(reqURL, res) {
   await USER_DB.pushUser(regEmail);
   res.writeHead(200, { "Content-type": MIME.json });
   sendJsonErr(res, STATUS.emailRegistered);
-  //await sendWelcomeEmail(regEmail, reqURL);
+  await sendWelcomeEmail(regEmail, reqURL);
 }
 
 const server = http.createServer(async (req, res) => {
