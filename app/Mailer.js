@@ -1,24 +1,35 @@
-const {SENDGRID_API_KEY, MAIL_ADDR} = require("./Constants");
+const { MAIL_API_KEY, MAIL_ADDR } = require("./Constants");
+const SibApiV3Sdk = require("sib-api-v3-sdk");
 
-const sgMail = require('@sendgrid/mail')
-
-sgMail.setApiKey(SENDGRID_API_KEY);
+const client = SibApiV3Sdk.ApiClient.instance;
+client.authentications["api-key"].apiKey = MAIL_API_KEY;
 
 function sendMail(to, subject, html) {
-  console.log(MAIL_ADDR);
-  const mail = {
-    to,
-    from: MAIL_ADDR,
-    subject,
-    html
-  }
+  return new Promise(async (resolve, reject) => {
+    const contact = {
+      email: to,
+      attributes: { FNAME: to.split("@").shift(), LNAME: "" },
+    };
+    const senderName = MAIL_ADDR.split("@").shift();
+    const receiverName = to.split("@").shift();
 
-  return new Promise((resolve, reject) => {
-    sgMail
-      .send(mail)
-      .then(() => resolve("email sent"))
-      .catch(err => reject(err));
-  })
+    try {
+      SibApiV3Sdk.ContactsApi().createContact(contact);
+    } catch (err) {}
+
+    const mail = {
+      to: [{ email: to, name: receiverName }],
+      subject,
+      sender: { email: MAIL_ADDR, name: senderName },
+      replyTo: { email: MAIL_ADDR, name: senderName },
+      htmlContent: html,
+    };
+
+    new SibApiV3Sdk.TransactionalEmailsApi()
+      .sendTransacEmail(mail)
+      .then(() => resolve(`sent email to ${mail}`))
+      .catch((err) => reject(err));
+  });
 }
 
 module.exports = sendMail;

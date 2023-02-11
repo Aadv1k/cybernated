@@ -6,14 +6,20 @@ const { CRON_TIMEZONE, CRON_CMD } = require("./Constants");
 const NewsModel = require("../models/NewsModel");
 const UserModel = require("../models/UserModel");
 const cron = require("node-cron");
-const {createHash} = require("crypto");
+const { createHash } = require("crypto");
 const fs = require("fs");
 
 function genEtag(data) {
-  fs.writeFileSync("./meta.json", JSON.stringify({
-    hash: createHash('md5').update(data).digest('hex')
-  }));
+  fs.writeFileSync(
+    "./meta.json",
+    JSON.stringify({
+      hash: createHash("md5").update(data).digest("hex"),
+    })
+  );
 }
+
+const maildb = new UserModel();
+const newsdb = new NewsModel();
 
 async function pushDataToDb() {
   const db = new NewsModel();
@@ -27,20 +33,17 @@ async function pushDataToDb() {
 
   await db.pushNews(news);
   await db.pushPrices(prices.slice(0, 10));
-  console.log("[INFO] updated DB with latest feed")
+  console.log("[INFO] updated DB with latest feed");
 
   await db.close();
 }
 
 async function mailAndPush() {
-  const maildb = new UserModel();
-  const newsdb = new NewsModel();
-
   await maildb.init();
   await newsdb.init();
 
-  const mailCollection = await maildb.getUsers()
-  let emails = mailCollection.map(e => e.email);
+  const mailCollection = await maildb.getUsers();
+  let emails = mailCollection.map((e) => e.email);
 
   const news = await newsdb.getNews();
   const prices = await newsdb.getPrices();
@@ -51,36 +54,44 @@ async function mailAndPush() {
   const date = new Date();
   let month = date.getMonth() + 1;
   let day = date.getDate();
-  const today = "dd/mm".replace('mm', month < 10 ? `0${month}` : month).replace('dd', day < 10 ? `0${day}` : day);
-  console.log("[INFO] Sending mail")
+  const today = "dd/mm"
+    .replace("mm", month < 10 ? `0${month}` : month)
+    .replace("dd", day < 10 ? `0${day}` : day);
+  console.log("[INFO] Sending mail");
 
   emails.forEach(async (mail) => {
     const html = await renderFile("./views/mailTemplate.ejs", {
-      news: news, 
-      prices: prices, 
-      greeting: "Good morning! " + mail.split('@')[0], 
+      news: news,
+      prices: prices,
+      greeting: "Good morning! " + mail.split("@")[0],
       welcome: false,
       deregisterLink: "",
       siteLink: "",
     });
 
     sendMail(mail, `Cybernated feed for ${today}`, html)
-      .then(async () => { 
-        console.log("[INFO] Sent mail to", mail)
+      .then(async () => {
+        console.log("[INFO] Sent mail to", mail);
       })
-      .catch(async (err) => { 
-        console.error(`[ERROR] Couldn't send to ${mail} due to ${err}`) 
-      })
+      .catch(async (err) => {
+        console.error(`[ERROR] Couldn't send to ${mail} due to ${err}`);
+      });
   });
-
 }
 
-cron.schedule(CRON_CMD, async () => {
-  console.log("[INFO] Cron job started")
-  await pushDataToDb();
-  // NOTE: EMAIL UNDER VERIFICATION
-  //await mailAndPush();
-}, {
-   scheduled: true,
-   timezone:CRON_TIMEZONE
-});
+cron.schedule(
+  CRON_CMD,
+  async () => {
+    console.log("[INFO] Cron job started");
+    try {
+      await pushDataToDb();
+      await mailAndPush();
+    } catch (err) {
+      console.error(err);
+    }
+  },
+  {
+    scheduled: true,
+    timezone: CRON_TIMEZONE,
+  }
+);
