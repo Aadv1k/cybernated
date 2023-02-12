@@ -60,8 +60,9 @@ async function handleIndex(res) {
   });
   await NEWS_DB.init();
   const news = await NEWS_DB.getNews();
+  const prices = await NEWS_DB.getPrices();
 
-  ejs.renderFile("./views/index.ejs", {news: news}, (err, htmlStr) => {
+  ejs.renderFile("./views/index.ejs", {news: news, prices: prices}, (err, htmlStr) => {
     if (err) console.error(err);
     res.write(htmlStr);
   })

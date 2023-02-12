@@ -25,34 +25,19 @@
   </section>
 
   <section class="content">
-    <!-- TODO: implement this
-      <span class="news__title">Coindesk</span>
-      <ul class="news__coindesk">
+    <h2 class="news__title">Latest from TheBlock</h2>
+      <ul class="news-feed">
         <% for (const dat of news) {%>
-        <% if (dat.source.toLowerCase() === "coindesk") {%>
-            <li>
-              <a class="news__link" target="_blank" href="<%=dat.url%>"><%=dat.title%></a>
-            </li>
+        <% if (dat.source.toLowerCase() === "theblock") {%>
+          <li class="feed__itm">
+            <div class="feed__img">
+              <img src="<%=dat.img%>" alt="<%=dat.title%>">
+            </div>
+            <a class=" feed__title"  href="<%= '/post/' + dat.source + '/' + dat.url.split('/').pop() %>"><%=dat.title%></a>
+          </li>
           <% } %>
         <% } %>
       </ul>
-      -->
-
-      <h2 class="news__title">Latest from TheBlock</h2>
-        <ul class="news-feed">
-          <% for (const dat of news) {%>
-          <% if (dat.source.toLowerCase() === "theblock") {%>
-            <li class="feed__itm">
-              <div class="feed__img">
-                <img src="<%=dat.img%>" alt="<%=dat.title%>">
-              </div>
-              <a class="
-                feed__title"  href="<%= '/post/' + dat.source + '/' + dat.url.split('/').pop() %>"><%=dat.title%></a>
-              <a class="feed__more" href="<%= '/post/' + dat.source + '/' + dat.url.split('/').pop() %>">read more</a>
-            </li>
-            <% } %>
-          <% } %>
-        </ul>
 
       <h2 class="news__title">Latest from Cointelegraph</h2>
         <ul class="news-feed">
@@ -62,9 +47,7 @@
               <div class="feed__img">
                 <img src="<%=dat.img%>" alt="<%=dat.title%>">
               </div>
-              <a class="
-                feed__title"  href="<%= '/post/' + dat.source + '/' + dat.url.split('/').pop() %>"><%=dat.title%></a>
-              <a class="feed__more" href="<%= '/post/' + dat.source + '/' + dat.url.split('/').pop() %>">read more</a>
+              <a class="feed__title"  href="<%= '/post/' + dat.source + '/' + dat.url.split('/').pop() %>"><%=dat.title%></a>
             </li>
             <% } %>
           <% } %>
@@ -78,16 +61,12 @@
               <div class="feed__img">
                 <img src="<%=dat.img%>" alt="<%=dat.title%>">
               </div>
-              <a class="
-                feed__title"  href="<%= '/post/' + dat.source + '/' + dat.url.split('/').pop() %>"><%=dat.title%></a>
-              <a class="feed__more" href="<%= '/post/' + dat.source + '/' + dat.url.split('/').pop() %>">read more</a>
+              <a class=" feed__title"  href="<%= '/post/' + dat.source + '/' + dat.url.split('/').pop() %>"><%=dat.title%></a> 
             </li>
             <% } %>
           <% } %>
         </ul>
       </div>
-
-
   </section>
 </body>
 </html>

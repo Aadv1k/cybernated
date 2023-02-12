@@ -50,7 +50,8 @@ h1,h2,h3,h4,span.brand {
 
 .post__content p {
   line-height: 1.5;
-  margin-block: .5rem;
+  margin-block: .8rem;
+  color: #191919;
 }
 
 .post__source {
