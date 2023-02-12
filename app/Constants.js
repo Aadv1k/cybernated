@@ -61,6 +61,7 @@ module.exports = {
     json: "application/json",
     html: "text/html",
     css: "text/css",
-    js: "text/javascript"
+    js: "text/javascript",
+    png: "image/png"
   }
 }
