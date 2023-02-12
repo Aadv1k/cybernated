@@ -12,21 +12,26 @@ this will start a server and a cron job in the background.
 
 ## Stack
 
-### backend / server
+### The backend
 
 The app uses a watered down version of the [MVC](https://www.tutorialspoint.com/mvc_framework/mvc_framework_introduction.htm) framework. Here is a walkthrough of the project alongside the basic functionality
 
-- We use `mongodb` and [atlas](https://www.mongodb.com/atlas) as our database; [`./models`](./models)
-  - [`./models/NewsModel.js`](./models/NewsModel.js) the atlas cluster has a `newsdb` DB with `coinPrices`, `news` as two collections
-  - [`./models/UserModel.js`](./models/UserModel.js) the atlas cluster has a `users` DB with a `users` collection to store user email
-- We use builtin `http` module to handle server or any other requests [`./app/server.js`](./app/server.js)
-- We use `Atlas API` to verify emails, the key is stored in `.env`; [`./app/EmailValidator.js`](./app/EmailValidator.js)
-**NOTE: Atlas API validation is disabled in development mode, this is done to prevent the developer from exausting their API Calls**
-- `nodemailer` is used to send mails via an outlook account; [`./app/Mailer.js`](./app/Mailer.js)
-- We use `cheerio` to scrape data from different sites; [`./app/NewsAggregator.js`](./app/NewsAggregator.js)
-- We run a `node-cron` job that updates our news database, and sends a mail to all subscribers at 7:00 IST; [`./app/BulkMailer.js`](./app/BulkMailer.js)
-
-All the "config" is located at [`./app/Constants.js`](./app/Constants.js)
+- For the server and other http operations we use the default `node-http` lib [`./app/server.js`](./app/server.js)
+- The App uses regex and [Abstract API](https://www.abstractapi.com/) to verify the email [`./app/EmailValidator.js`](./app/EmailValidator.js)
+  - `isEmailReal()`: checks with the API to see if email address is deliverable to
+  - `isEmailValid()`: checks the syntax of the email
+- We use MongoDB along with mongo node client ([Atlas](https://www.mongodb.com/atlas)) as our primary database for storing user emails and news data
+  - [`./models/NewsModel.js`](./models/NewsModel.js) `Newsdb` contains `coinPrices`, `news` as two collections.
+  - [`./models/UserModel.js`](./models/UserModel.js) `users` contains with a `users` collection to store user emails.
+- To send the emails the App uses [Sendinblue](https://www.sendinblue.com/) [`./app/Mailer.js`](./app/Mailer.js)
+  - `sendMail()`: add the user to contact list and send a new mail
+- For the news the App uses `cheerio` and `node-http` to fetch and scrap the required data. [`./app/NewsAggregator.js`](./app/NewsAggregator.js)
+  - `getNewsData()`: scrap the news from different sites and return a singular array
+  - `getCoinPrices()`: scrap the coin prices and return an array
+- Finally [`./app/BulkMailer.js`](./app/BulkMailer.js) runs a cron job that everyday at `7 AM IST`
+  - `pushDataToDb()`: Clears the old data from `Newsdb` fetches new data `getCoinPrices()`, `getNewsData()` and puts it in their respective collections.
+  - `mailAndPush()`: gets the list of all the users and uses `sendMail()` to send an email using the mail template to each user 
+- [`./app/Constants.js`](./app/Constants.js)
 
 ### frontend
 
@@ -43,7 +48,7 @@ The app uses vanilla JavaScript and a simple [Notifier API](./public/notifier.js
 - `email=`: a real valid email address
   - will remove the email from the database if it exists will raise a `invalid-user-to-deregister`
 
-### Response
+### Responses
 
 example response:
 ```JSON
