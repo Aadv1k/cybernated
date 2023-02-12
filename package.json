@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --forceExit",
-    "start": "node index.js & node ./app/BulkMailer.js"
+    "start": "node index.js & node --max-old-space-size=256 ./app/BulkMailer.js"
   },
   "author": "Aadv1k <aadv1k@outlook.com>",
   "license": "MIT",
