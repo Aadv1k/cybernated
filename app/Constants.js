@@ -12,7 +12,7 @@ module.exports = {
   ABSTRACT_API_URL: "https://emailvalidation.abstractapi.com/v1/",
   EMAIL_REG: /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/,
   CRON_TIMEZONE: "Asia/Kolkata",
-  CRON_CMD: "00 07 * * *", // 7 AM IST
+  CRON_CMD: "32 09 * * *", // 7 AM IST
 
   STATUS: {
     emailRegistered: {
