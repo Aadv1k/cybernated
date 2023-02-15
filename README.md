@@ -1,12 +1,6 @@
 # cybernated 🤖
 
-https://user-images.githubusercontent.com/81357878/219027540-0c1dee05-c63c-4490-8e02-3b4cc7c8281f.mp4
-
 ## Install
-
-
-
-
 
 ```shell
 npm install
