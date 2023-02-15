@@ -1,6 +1,6 @@
-# cybernated 🤖
-
-## Install
+![simple-logo](https://user-images.githubusercontent.com/81357878/219032411-df73e148-e09e-4556-9f9a-80b980b44c9e.svg)
+  
+## Get
 
 ```shell
 npm install
@@ -10,7 +10,7 @@ this will start a server and a cron job in the background.
 
 ## Stack
 
-### The backend
+### BACK-END 
 
 The app uses a watered down version of the [MVC](https://www.tutorialspoint.com/mvc_framework/mvc_framework_introduction.htm) framework. Here is a walkthrough of the project alongside the basic functionality
 
@@ -31,7 +31,7 @@ The app uses a watered down version of the [MVC](https://www.tutorialspoint.com/
   - `mailAndPush()`: gets the list of all the users and uses `sendMail()` to send an email using the mail template to each user 
 - [`./app/Constants.js`](./app/Constants.js)
 
-### frontend
+### FRONT-END
 
 The app uses vanilla JavaScript and a simple [Notifier API](./public/notifier.js)
 
