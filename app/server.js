@@ -51,16 +51,9 @@ async function handlePost(url, res) {
   });
 }
 
-function getEtag() {
-  const file = readFileSync("./meta.json");
-  return JSON.parse(file).hash;
-}
-
 async function handleIndex(res) {
   res.writeHead(200, {
     "Content-type": MIME.html,
-    "Cache-control": "max-age=86400",
-    Etag: getEtag(),
   });
   await NEWS_DB.init();
   const news = await NEWS_DB.getNews();
@@ -193,12 +186,7 @@ const server = http.createServer(async (req, res) => {
   const ext = req.url.split(".").pop();
 
   if (uri === "/" || uri === "/index") {
-    if (req.headers["if-none-match"] === getEtag()) {
-      res.statusCode = 304;
-      res.end();
-    } else {
-      await handleIndex(res);
-    }
+    await handleIndex(res);
   } else if (uri.match("/favicon")) {
     const img = readFileSync("public/favicon-16x16.png");
     res.writeHead(200, { "Content-Type": MIME.png });
