@@ -67,6 +67,7 @@ async function mailAndPush() {
   });
 }
 
+console.log("[INFO] Cron job was initialied")
 cron.schedule(
   CRON_CMD,
   async () => {
