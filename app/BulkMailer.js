@@ -1,14 +1,11 @@
 const { renderFile } = require("ejs");
+const cron = require("node-cron");
 
 const sendMail = require("./Mailer");
 const { getNewsData, getCoinPrices } = require("./NewsAggregator");
 const { CRON_TIMEZONE, CRON_CMD } = require("./Constants");
 const NewsModel = require("../models/NewsModel");
 const UserModel = require("../models/UserModel");
-const cron = require("node-cron");
-
-const maildb = new UserModel();
-const newsdb = new NewsModel();
 
 async function pushDataToDb() {
   const db = new NewsModel();
@@ -27,11 +24,11 @@ async function pushDataToDb() {
 }
 
 async function mailAndPush() {
+  const maildb = new UserModel();
+  const newsdb = new NewsModel();
+
   await maildb.init();
   await newsdb.init();
-
-  const mailCollection = await maildb.getUsers();
-  let emails = mailCollection.map((e) => e.email);
 
   const news = await newsdb.getNews();
   const prices = await newsdb.getPrices();
@@ -47,7 +44,9 @@ async function mailAndPush() {
     .replace("dd", day < 10 ? `0${day}` : day);
   console.log("[INFO] Sending mail");
 
-  emails.forEach(async (mail) => {
+  const mailCollection = await maildb.getUsers();
+
+  mailCollection.forEach(async ({ mail }) => {
     const html = await renderFile("./views/mailTemplate.ejs", {
       news: news,
       prices: prices,
@@ -67,7 +66,6 @@ async function mailAndPush() {
   });
 }
 
-console.log("[INFO] Cron job was initialied")
 cron.schedule(
   CRON_CMD,
   async () => {
